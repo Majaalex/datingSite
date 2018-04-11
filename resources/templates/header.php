@@ -4,16 +4,13 @@
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" type="text/css" href="../../public-html/css/style.css">
     <title>Simple Site</title>
 </head>
 
 <body>
 <div id="header">
-    <h1>Simple Site</h1>
-    <ul class="nav global">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Articles</a></li>
-        <li><a href="#">Portfolio</a></li>
-    </ul>
-
+        <div><a href="#">Home</a></div>
+        <div><a href="#">Profile</a></div>
+        <div><a href="#">Browse</a></div>
 </div>
