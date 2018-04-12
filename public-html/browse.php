@@ -6,7 +6,7 @@ require_once(TEMPLATES_PATH . "/header.php");
 ?>
     <div id="container">
         <div id="content">
-            <!-- content -->
+            <p>Hello my friend</p>
         </div>
         <?php
         require_once(TEMPLATES_PATH . "/rightPanel.php");
