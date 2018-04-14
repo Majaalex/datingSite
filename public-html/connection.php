@@ -1,5 +1,6 @@
 
 <?php
+
 require_once '../resources/templates/header.php';
 $servername = "localhost";
 $username = "root";
@@ -55,3 +56,4 @@ if($db->query($sql)){
 
 require_once '../resources/templates/footer.php';
 ?>
+*/

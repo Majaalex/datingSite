@@ -1,7 +1,8 @@
 
 <?php
 require_once '../resources/templates/header.php';
-$servername = "localhost";
+require_once 'db.php';
+/*$servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "datingsite";
@@ -14,7 +15,7 @@ if($db->connect_error){
 
 //Om allt gick bra, skriv trevligt meddlenade i konsolen
 echo "Connection to the database was successful </br>";
-
+*/
 //Förbered av ett kommando
 
 $firstName = $_POST['firstname'];
@@ -41,13 +42,17 @@ if (isset($_POST['genderO'])){
 } else {
     $other = 0;
 }
-$check = db::instance()->count('SELECT * FROM datingsite WHERE username = ?', array($_POST['username']));
-echo "$check";
-if ($check == 1){
-    $sql = "INSERT INTO users (username, firstname, lastname, password, email, postal, about, salary, searchMan, searchWoman, searchOther)
-        VALUES ('$user', '$firstName', '$lastName', '$password','$email', '$postal', '$about', '$salary', '$male' , '$female', '$other')";
-}
+$sqel = "INSERT INTO users (username, firstname, lastname, password, email, postal, about, salary, searchMan, searchWoman, searchOther)
+        VALUES (?)";
+$array = array("$user", "$firstName", "$lastName", "$password","$email", "$postal", "$about", "$salary", "$male" , "$female", "$other");
 
+$count = db::instance()->count('SELECT * FROM users WHERE username = ?', array($_POST['username']));
+//$check = db::instance()->action('SELECT * FROM users WHERE username = ?', array($_POST['username']));
+echo "$count" . "CHECK HERE";
+
+if ($check != 1){
+    $sq = db::instance()->action("$sqel", $array);
+}
 
 
 if($db->query($sql)){
