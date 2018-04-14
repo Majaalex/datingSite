@@ -41,9 +41,13 @@ if (isset($_POST['genderO'])){
 } else {
     $other = 0;
 }
-
-$sql = "INSERT INTO users (username, firstname, lastname, password, email, postal, about, salary, searchMan, searchWoman, searchOther)
+$check = db::instance()->count('SELECT * FROM datingsite WHERE username = ?', array($_POST['username']));
+echo "$check";
+if ($check == 1){
+    $sql = "INSERT INTO users (username, firstname, lastname, password, email, postal, about, salary, searchMan, searchWoman, searchOther)
         VALUES ('$user', '$firstName', '$lastName', '$password','$email', '$postal', '$about', '$salary', '$male' , '$female', '$other')";
+}
+
 
 
 if($db->query($sql)){
