@@ -43,16 +43,14 @@ if (isset($_POST['genderO'])){
     $other = 0;
 }
 $sqel = "INSERT INTO users (username, firstname, lastname, password, email, postal, about, salary, searchMan, searchWoman, searchOther)
-        VALUES (?)";
+        VALUES ?";
 $array = array("$user", "$firstName", "$lastName", "$password","$email", "$postal", "$about", "$salary", "$male" , "$female", "$other");
 
-$count = db::instance()->count('SELECT * FROM users WHERE username = ?', array($_POST['username']));
+$count = db::instance()->get("SELECT * FROM users WHERE username = ?", array($_POST['username']));
 //$check = db::instance()->action('SELECT * FROM users WHERE username = ?', array($_POST['username']));
-echo "$count" . "CHECK HERE";
+echo var_dump($count) . "CHECK HERE";
 
-if ($check != 1){
-    $sq = db::instance()->action("$sqel", $array);
-}
+    $sq = db::instance()->query("$sqel", $array);
 
 
 if($db->query($sql)){
