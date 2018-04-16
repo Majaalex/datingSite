@@ -10,7 +10,8 @@
 
 <body>
 <div id="header">
-        <div><a href="#">Home</a></div>
-        <div><a href="#">Profile</a></div>
-        <div><a href="#">Browse</a></div>
+        <div><a href="" </div>
+        <div><a href=<?php echo url_for("profile.php") ?>>Profile</a></div>
+        <div><a href=<?php echo url_for("browse.php")?>>Browse</a></div>
+        <div><a href=<?php echo url_for("logout.php")?>>Log out</a></div>
 </div>
