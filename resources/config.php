@@ -11,15 +11,15 @@
 $config = array(
     "db" => array(
         "db1" => array(
-            "dbname" => "database1",
-            "username" => "dbUser",
-            "password" => "pa$$",
+            "dbname" => "datingsite",
+            "username" => "root",
+            "password" => "",
             "host" => "localhost"
         ),
         "db2" => array(
-            "dbname" => "database2",
-            "username" => "dbUser",
-            "password" => "pa$$",
+            "dbname" => "datingsite",
+            "username" => "root",
+            "password" => "",
             "host" => "localhost"
         )
     ),

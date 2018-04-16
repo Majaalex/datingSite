@@ -1,7 +1,8 @@
 
 <?php
 require_once '../resources/templates/header.php';
-require_once 'db.php';
+require_once '../resources/initialize.php';
+require_once '../resources/db.php';
 /*$servername = "localhost";
 $username = "root";
 $password = "";
@@ -42,15 +43,14 @@ if (isset($_POST['genderO'])){
 } else {
     $other = 0;
 }
-$sqel = "INSERT INTO users (username, firstname, lastname, password, email, postal, about, salary, searchMan, searchWoman, searchOther)
-        VALUES ?";
+$sqel = "INSERT INTO users (username, firstname, lastname, password, email, postal, about, salary, searchMan, searchWoman, searchOther) VALUES ?";
 $array = array("$user", "$firstName", "$lastName", "$password","$email", "$postal", "$about", "$salary", "$male" , "$female", "$other");
 
 $count = db::instance()->get("SELECT * FROM users WHERE username = ?", array($_POST['username']));
 //$check = db::instance()->action('SELECT * FROM users WHERE username = ?', array($_POST['username']));
 echo var_dump($count) . "CHECK HERE";
 
-    $sq = db::instance()->query("$sqel", $array);
+db::instance()->query($sqel,$array);
 
 
 if($db->query($sql)){
