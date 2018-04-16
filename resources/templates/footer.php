@@ -1,5 +1,6 @@
 <div id="footer">
-    Footer content...
+    &copy; <?php echo date('Y'); ?> Alexander & Niklas
 </div>
 </body>
+
 </html>

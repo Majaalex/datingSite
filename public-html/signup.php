@@ -5,7 +5,7 @@
 </head>
 
 <div>
-    <form action="connection.php" method="post">
+    <form action="connect.php" method="post">
         <pre>
             First Name:         <input type="text" name="firstname" required/><br>
             Last Name:          <input type="text" name="lastname" required/><br>
@@ -19,7 +19,7 @@
             Looking for:        <input type="checkbox" name="genderM" value="0" checked/> Male
                                 <input type="checkbox" name="genderF" value="0" /> Female
                                 <input type="checkbox" name ="genderO" value="0" /> Other
-            <input type="submit" value="Sing up"/>
+            <input type="submit" value="Register"/>
         </pre>
     </form>
 </div>

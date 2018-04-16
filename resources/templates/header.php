@@ -5,15 +5,13 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Simple Site</title>
+    <link rel="stylesheet" type="text/css" href="http://localhost/datingsite/public-html/css/style.css">
 </head>
 
 <body>
 <div id="header">
-    <h1>Simple Site</h1>
-    <ul class="nav global">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Articles</a></li>
-        <li><a href="#">Portfolio</a></li>
-    </ul>
-
+        <div><a href="" </div>
+        <div><a href=<?php echo url_for("profile.php") ?>>Profile</a></div>
+        <div><a href=<?php echo url_for("browse.php")?>>Browse</a></div>
+        <div><a href=<?php echo url_for("logout.php")?>>Log out</a></div>
 </div>

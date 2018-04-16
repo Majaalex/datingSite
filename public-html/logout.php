@@ -6,7 +6,7 @@ require_once(TEMPLATES_PATH . "/header.php");
 ?>
     <div id="container">
         <div id="content">
-            <?php echo url_for("index.php"); ?>
+            <h1>logout</h1>
         </div>
         <?php
         require_once(TEMPLATES_PATH . "/rightPanel.php");

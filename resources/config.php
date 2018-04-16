@@ -11,15 +11,15 @@
 $config = array(
     "db" => array(
         "db1" => array(
-            "dbname" => "database1",
-            "username" => "dbUser",
-            "password" => "pa$$",
+            "dbname" => "datingsite",
+            "username" => "root",
+            "password" => "",
             "host" => "localhost"
         ),
         "db2" => array(
-            "dbname" => "database2",
-            "username" => "dbUser",
-            "password" => "pa$$",
+            "dbname" => "datingsite",
+            "username" => "root",
+            "password" => "",
             "host" => "localhost"
         )
     ),
@@ -27,10 +27,10 @@ $config = array(
         "baseUrl" => "http://example.com"
     ),
     "paths" => array(
-        "resources" => "/path/to/resources",
+        "resources" => "../resources",
         "images" => array(
-            "content" => $_SERVER["DOCUMENT_ROOT"] . "/images/content",
-            "layout" => $_SERVER["DOCUMENT_ROOT"] . "/images/layout"
+            "content" => $_SERVER["DOCUMENT_ROOT"] . "/img/content",
+            "layout" => $_SERVER["DOCUMENT_ROOT"] . "/img/layout"
         )
     )
 );
@@ -51,10 +51,13 @@ or define("LIBRARY_PATH", realpath(dirname(__FILE__) . '/library'));
 defined("TEMPLATES_PATH")
 or define("TEMPLATES_PATH", realpath(dirname(__FILE__) . '/templates'));
 
+$public_end = strpos($_SERVER['SCRIPT_NAME'], '/public-html') + 12;
+$doc_root = substr($_SERVER['SCRIPT_NAME'], 0, $public_end);
+define("WWW_ROOT", $doc_root);
 /*
     Error reporting.
 */
 ini_set("error_reporting", "true");
 error_reporting(E_ALL|E_STRCT);
 
-?>
+require_once "functions.php";
