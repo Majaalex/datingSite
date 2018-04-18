@@ -1,18 +1,13 @@
 
-<html>
-<head>
-    <meta charset="utf-8">
-    <title>Dating Signup</title>
-</head>
-
-<body>
-<h1>Connection site</h1>
-
 <?php
+require_once '../resources/config.php';
+require_once '../resources/templates/header.php';
+
 $servername = "localhost";
 $username = "root";
 $password = "";
 $dbname = "datingsite";
+
 //Skapa Uppkopling
 $db = new mysqli($servername,$username,$password,$dbname);
 //Kolla att det går och kopplla sig, om ej skriv ut felet
@@ -20,50 +15,44 @@ if($db->connect_error){
     die("Something went wrong:" . $db->connect_error);
 }
 
-//Om allt gick bra, skriv trevligt meddlenade i konsolen
-echo "Connection to the database was successful </br>";
+$firstName = "";
+$lastName = "";
+$user = "";
+$email = "";
+$about = "";
 
-//Förbered av ett kommando
+if (isset($_POST['signup'])) {
+    $firstName = $_POST['firstname'];
+    $lastName = $_POST['lastname'];
+    $user = $_POST['username'];
+    $pass = $_POST['password'];                         //TODO PASSWORD HASHING
+    $passValidation =$_POST['passwordValidation'];
+    $email = $_POST['email'];
+    $postal = $_POST['postalCode'];
+    $about = $_POST['about'];
+    $salary = $_POST['salary'];
+    $currency = $_POST['currency'];
+    $gender = $_POST['gender'];
 
-$firstName = $_POST['firstname'];
-$lastName = $_POST['lastname'];
-$user = $_POST['username'];
-$password = $_POST['password'];
-$email = $_POST['email'];
-$postal = $_POST['postalCode'];
-$about = $_POST['about'];
-$salary = $_POST['salary'];
 
-if (isset($_POST['genderM'])){
-    $male = $_POST['genderM'];;
-} else {
-    $male = 0;
+    $sql_user = "SELECT * FROM users WHERE username='$user'";
+    $sql_email = "SELECT * FROM users WHERE email='$email'";
+    $res_user = mysqli_query($db, $sql_user);
+    $res_email = mysqli_query($db, $sql_email);
+
+    if (mysqli_num_rows($res_user) > 0) {
+        $name_error = "Username already taken";
+    }else if($pass != $passValidation){
+        $passValidation_error = "Password does not match";
+    }else if(mysqli_num_rows($res_email) > 0){
+        $email_error = "Email already in use";
+    }else{
+        db::instance()->action(
+            "INSERT INTO users (username, firstname, lastname, password, email, postal, about, salary, currency, gender) 
+            VALUES (?,?,?,?,?,?,?,?,?,?)", array("$user", "$firstName", "$lastName", "$pass","$email", "$postal", "$about", "$salary", "$currency", "$gender" ));
+        //TODO HEADER to main page
+    }
 }
-if (isset($_POST['genderF'])){
-    $female = $_POST['genderF'];
-} else {
-    $female = 0;
-}
-if (isset($_POST['genderO'])){
-    $other = $_POST['genderO'];
-} else {
-    $other = 0;
-}
 
-$sql = "INSERT INTO users (username, firstname, lastname, password, email, postal, about, salary, searchMan, searchWoman, searchOther)
-        VALUES ('$user', '$firstName', '$lastName', '$password','$email', '$postal', '$about', '$salary', '$male' , '$female', '$other')";
-
-
-if($db->query($sql)){
-    echo " New record was created successfully";
-} else {
-    echo "Error: " . $sql . "<br>" . mysqli_error($db);
-}
-
-
-
+require_once '../resources/templates/footer.php';
 ?>
-
-</body>
-
-</html>
