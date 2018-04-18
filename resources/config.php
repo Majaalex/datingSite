@@ -61,3 +61,4 @@ ini_set("error_reporting", "true");
 error_reporting(E_ALL|E_STRCT);
 
 require_once "functions.php";
+require_once "db.php";
