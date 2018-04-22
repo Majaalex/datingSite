@@ -1,13 +1,12 @@
 <?php session_start();
 if(isset($_SESSION['id'])){
-    echo "WELCOME!";
-}else{
-    echo "you are not logged in";
+    echo "Welcome " . $_SESSION['id'] . "!";
+} else {
+    echo "You are not logged in";
 }
-
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-    "http://www.w3.org/TR/html4/strict.dtd">
+        "http://www.w3.org/TR/html4/strict.dtd">
 
 <html lang="en">
 <head>
@@ -17,12 +16,31 @@ if(isset($_SESSION['id'])){
 </head>
 
 <body>
-<div id="header">
-        <div id="left"><a href=<?php echo url_for("profile.php") ?>>Profile</a></div>
-        <div id="center"><a href=<?php echo url_for("browse.php")?>>Browse</a></div>
-        <div id="right"><a href=<?php echo url_for("login.php")?>>Login</a></div>
-        <div id="right"><a href=<?php echo url_for("signup.php")?>>Sign up</a></div>
-        <div id="right"><a href=<?php echo url_for("logout.php")?>>Log out</a></div>
+<div id="menu">
+    <table id="menu-tbl">
+        <tr>
+            <td>
+                <ul>
+                    <?php if (isset($_SESSION['id'])){
+                        echo "<li><a href =" . url_for("profile.php") . ">" . h($_SESSION['id']) . "</a></li>";
+                    } ?>
+                    <li><a href=<?php echo url_for("browse.php")?>>Browse</a></li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <?php if (!isset($_SESSION['id'])){
+                        echo "<li><a href =" . url_for("login.php") . ">Login</a></li>";
+                        echo "<li><a href =" . url_for("signup.php") . ">Sign up</a></li>";
+                    } elseif (isset($_SESSION['id'])) {
+                        echo "<li><a href =" . url_for("logout.php") . ">Log out</a></li>";
+                    }
+                    ?>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+
+        </tr>
+    </table>
 </div>
-
-

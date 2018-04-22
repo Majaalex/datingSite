@@ -4,6 +4,7 @@ require_once("../resources/config.php");
 
 require_once(TEMPLATES_PATH . "/header.php");
 session_destroy();
+header("Location: ./browse.php");
 ?>
     <div id="container">
         <div id="content">
