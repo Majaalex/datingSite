@@ -1,4 +1,3 @@
-
 <?php
 require_once '../resources/config.php';
 require_once '../resources/db.php';

@@ -1,3 +1,4 @@
+
 <?php
 // load up your config file
 require_once("../resources/config.php");
@@ -12,4 +13,3 @@ session_destroy();
     </div>
 <?php
 require_once(TEMPLATES_PATH . "/footer.php");
-?>

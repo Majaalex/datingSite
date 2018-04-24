@@ -1,30 +1,47 @@
+
 <?php
+session_start();
 echo "<table id='browse-tbl'>";
 require_once("../resources/config.php");
 require_once "../resources/functions.php";
 $i = 0;
-
-echo "bloooppererererererer";
-$array = db::instance()->get("SELECT * FROM users", array());
-$count = db::instance()-> count("SELECT * FROM users", array("0"));
+if (!isset($_GET['female'])){
+    $_GET['female'] = null;
+}
+if (!isset($_GET['male'])){
+    $_GET['male'] = null;
+}
+if (!isset($_GET['other'])){
+    $_GET['other'] = null;
+}
+//$array = db::instance()->get("SELECT * FROM users", array());
+$count = db::instance()->count("SELECT * FROM users WHERE salary > ? AND salary < ? OR gender = ? OR gender = ? OR gender = ?",
+    array($_GET['minSalary'], $_GET['maxSalary'] , $_GET['female'], $_GET['male'], $_GET['other']));
+$array = db::instance()->get("SELECT * FROM users WHERE salary > ? AND salary < ? OR gender = ? OR gender = ? OR gender = ?",
+    array($_GET['minSalary'], $_GET['maxSalary'] , $_GET['female'], $_GET['male'], $_GET['other']));
+echo "boo";
 for ($row = 0; $row < $count / 5; $row++){
     echo "<tr>";
     for ($col = 0; $col < 5; $col++){
-        if ($i / 5 <= 1){
+        if ($i < $count){
             echo "<td class='browse'>";
             echo "<div>";
             echo "<ul>";
-            echo "<li>" . $array[$i]["username"] . "</li>";
-            echo "<li>" . $array[$i]["firstname"] . " " . $array[$i]["lastname"] . "</li>";
-            echo "<li>" . $array[$i]["about"] . "</li>";
-            echo "<li>" . $array[$i++]["salary"] . "</li>";
+            echo "<li>" . h($array[$i]["username"]) . "</li>";
+            echo "<li>" . h($array[$i]["firstname"]) . " " . h($array[$i]["lastname"]) . "</li>";
+            echo "<li>" . h($array[$i]["about"]) . "</li>";
+            if (isset($_SESSION['id'])){
+                echo "<li>" . h($array[$i]["email"]) . "</li>";
+            }
+            echo "<li>" . h($array[$i++]["salary"]) . "</li>";
             echo "</ul>";
             echo "</div>";
             echo "</td>";
+        } else {
+            break;
         }
     }
     echo "</tr>";
 }
 echo "</table>";
 echo "</div>";
-?>

@@ -1,3 +1,4 @@
+
 @font-face {
     font-family: 'Open Sans';
 }
@@ -338,6 +339,12 @@ input[type="submit"]:disabled {
     align-content: center;
 }
 
+.centered {
+    margin-left:auto;
+    margin-right:auto;
+    width: 250px;
+}
+
 /**************************************** SLIDER ***************************/
 section.range-slider {
     position: relative;
@@ -386,5 +393,4 @@ section.range-slider input:last-of-type::-moz-range-track {
     border: 0;
 }
 section.range-slider input[type=range]::-moz-focus-outer {
-    border: 0;
-}
+    border: 0;}
