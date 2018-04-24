@@ -19,7 +19,7 @@ require_once(TEMPLATES_PATH . "/header.php");
                         </tr>
                         <tr>
                             <td>
-                                <input type="password" name="password" placeholder="Pssword" required/><br>
+                                <input type="password" name="password" placeholder="Password" required/><br>
                             </td>
                         </tr>
                     </table>

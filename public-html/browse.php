@@ -82,15 +82,15 @@ require_once(TEMPLATES_PATH . "/header.php");
                 </form>
             </div>
         </div>
-
         <?php
         $id = 0;
         $array = db::instance()->get("SELECT * FROM users", array());
-
         $count = db::instance()->count("SELECT * FROM users", array("0"));
         echo "<div id='cont'>";
         echo "<div id='browse'>";
         echo "<table id='browse-tbl'>";
+
+        // Loops out all requested values in a neat table format
         $i = 0;
         for ($row = 0; $row < $count / 5; $row++){
             echo "<tr>";
@@ -99,7 +99,7 @@ require_once(TEMPLATES_PATH . "/header.php");
                     echo "<td class='browse'>";
                     echo "<div>";
                     echo "<ul>";
-                    echo "<li>" . h($array[$i]["username"]) . "</li>";
+                    echo "<li><a href='" . url_for("profile.php"). "?user=".  h($array[$i]["username"])  . "'>" . h($array[$i]["username"]) . "</a></li>";
                     echo "<li>" . h($array[$i]["firstname"]) . " " . h($array[$i]["lastname"]) . "</li>";
                     echo "<li>" . h($array[$i]["about"]) . "</li>";
                     if (isset($_SESSION['id'])){
@@ -121,17 +121,17 @@ require_once(TEMPLATES_PATH . "/header.php");
         ?>
     </div>
 </div>
+<script>
+    // sends form data as GET to browse_content.php, and returns it dynamically based on the filter options
+    $(document).ready(function(){
+        $("#filter-button").click(function(){
+            var get_data = $('#browse-set').serialize();
+            $("#browse").load("browse_content.php", get_data);
+
+        });
+    });
+</script>
 <?php
 require_once(TEMPLATES_PATH . "/footer.php");
 ?>
 
-<script>
-    // sends form data as GET to browse_content.php, and returns it dynamically based on the filter options
-        $(document).ready(function(){
-            $("#filter-button").click(function(){
-                var get_data = $('#browse-set').serialize();
-                $("#browse").load("browse_content.php", get_data);
-
-            });
-        });
-</script>

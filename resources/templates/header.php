@@ -17,18 +17,18 @@
         <td>
             <ul>
                 <?php if (isset($_SESSION['id'])){
-                    echo "<li><a href =" . url_for("profile.php"). "?=" .  h($_SESSION['id'])  . ">" . h($_SESSION['id']) . "</a></li>";
+                    echo "<li><a href='" . url_for("profile.php"). "?user=".  h($_SESSION['id'])  . "'>" . h($_SESSION['id']) . "</a></li>";
                 } ?>
-                <li><a href=<?php echo url_for("browse.php")?>>Browse</a></li>
+                <li><a href='<?php echo url_for("browse.php")?>'>Browse</a></li>
             </ul>
         </td>
         <td>
             <ul>
                 <?php if (!isset($_SESSION['id'])){
-                    echo "<li><a href =" . url_for("login.php") . ">Login</a></li>";
-                    echo "<li><a href =" . url_for("signup.php") . ">Sign up</a></li>";
+                    echo "<li><a href ='" . url_for("login.php") . "'>Login</a></li>";
+                    echo "<li><a href ='" . url_for("signup.php") . "'>Sign up</a></li>";
                 } elseif (isset($_SESSION['id'])) {
-                    echo "<li><a href =" . url_for("logout.php") . ">Log out</a></li>";
+                    echo "<li><a href ='" . url_for("logout.php") . "'>Log out</a></li>";
                 }
                 ?>
             </ul>

@@ -10,56 +10,47 @@ include('connect.php');
         <title>Signup to find your partner</title>
     </head>
 
-    <div>
+    <div class="centered">
         <form method="post" action="signup.php" id="register_form">
             <h1>Sign up</h1>
             <div>
-                <label>First Name: </label>
                 <input type="text" name="firstname" placeholder="First Name" value="<?php echo "$firstName"; ?>" required>
             </div>
             <div>
-                <label>Last Name: </label>
                 <input type="text" name="lastname" placeholder="Last Name" value="<?php echo "$lastName"; ?>" required>
             </div>
             <div <?php if (isset($name_error)): ?> class="form_error" <?php endif ?> >
-                <label>Username: </label>
                 <input type="text" name="username" placeholder="Username" value="<?php echo $user; ?>" required>
                 <?php if (isset($name_error)): ?>
                     <span><?php echo $name_error; ?></span>
                 <?php endif ?>
             </div>
             <div>
-                <label>Password: </label>
                 <input type="password" name="password" placeholder="Password" required >
             </div>
             <div <?php if (isset($passValidation_error)): ?> class="form_error" <?php endif ?> >
-                <label>Password check: </label>
                 <input type="password" name="passwordValidation" placeholder="Password" >
                 <?php if (isset($passValidation_error)): ?>
                     <span><?php echo $passValidation_error; ?></span>
                 <?php endif ?>
             </div>
             <div <?php if (isset($email_error)): ?> class="form_error" <?php endif ?> >
-                <label>Email: </label>
                 <input type="email" name="email" placeholder="Email" value="<?php echo $email; ?>" required>
                 <?php if (isset($email_error)): ?>
                     <span><?php echo $email_error; ?></span>
                 <?php endif ?>
             </div>
             <div>
-                <label>Postal code: </label>
                 <input type="number"  name="postalCode" placeholder="Postal code ex.00200" value="<?php echo "$postal"; ?>" required>
             </div>
             <div>
-                <label>About me: </label>
                 <input type="text" name="about" placeholder="About me" value="<?php echo "$about"; ?>" required >
             </div>
             <div>
-                <label>Salary: </label>
-                <input type="number" name="salary" placeholder="3546" value="<?php echo "$salary"; ?>" required>
+                <input type="number" name="salary" placeholder="Salary" value="<?php echo "$salary"; ?>" required>
             </div>
             <div>
-                <label>Currency: </label>               <!--TODO MAKE currency stay as the selected one -->
+                <label>Currency:                <!--TODO MAKE currency stay as the selected one -->
                 <select name="currency">
                     <option value="USD">USD</option>
                     <option value="EUR">EUR</option>
@@ -231,17 +222,18 @@ include('connect.php');
                     <option value="ZAR">ZAR</option>
                     <option value="ZMW">ZMW</option>
                     <option value="ZWL">ZWL</option>
-                </select>
+                </select></label>
             </div>
             <div>
+                <label>Gender:
                 <select name="gender">                  <!--TODO MAKE gender stay as the selected one -->
                     <option value="male">Male</option>
                     <option value="female">female</option>
                     <option value="other">Other</option>
-                </select>
+                </select></label>
             </div>
             <div>
-                <button type="submit" name="signup" >Sign up</button>
+                <input type="submit" value="Sign up" name="signup"/>
             </div>
         </form>
     </div>
