@@ -4,20 +4,21 @@ require_once("../resources/config.php");
 require_once "../resources/functions.php";
 require_once(TEMPLATES_PATH . "/header.php");
 ?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <div id="container">
     <div id="content">
         <h1>Browse</h1>
-        <div class="filter">
+        <div id="filter-container">
+            <div id="filter-content">
             <table>
                 <tr>
                     <td>
                         Searching for:
-                        <label for="male">Male:</label>
-                        <input type="checkbox" value="male" id="male">
-                        <label for="female">Female:</label>
-                        <input type="checkbox" value="female" id="female">
-                        <label for="other">Other:</label>
-                        <input type="checkbox" value="other" id="other">
+                        <pre>
+<label for="male">Male:</label> <input type="checkbox" value="male" id="male">
+<label for="female">Female:</label> <input type="checkbox" value="female" id="female">
+<label for="other">Other:</label> <input type="checkbox" value="other" id="other">
+                        </pre>
                     </td>
                     <td>
                         <!-- This block can be reused as many times as needed -->
@@ -29,8 +30,12 @@ require_once(TEMPLATES_PATH . "/header.php");
                             </section>
                         </div>
                     </td>
+                    <td>
+                        <input type="button" value="update filter" id="filter-button">
+                    </td>
                 </tr>
             </table>
+            </div>
         </div>
 
         <?php
@@ -38,6 +43,15 @@ require_once(TEMPLATES_PATH . "/header.php");
         $array = db::instance()->get("SELECT * FROM users", array());
         $count = db::instance()->count("SELECT * FROM users", array("0"));
         echo "<div id='cont'>";
+        ?>
+        <script>
+            $(document).ready(function(){
+                $("#filter-button").click(function(){
+                    $("#browse").load("browse_content.php");
+                });
+            });
+        </script>
+        <?php
         echo "<div id='browse'>";
         echo "<table id='browse-tbl'>";
         $i = 0;
@@ -64,15 +78,13 @@ require_once(TEMPLATES_PATH . "/header.php");
         echo "</div>";
         ?>
     </div>
-    <?php
-    require_once(TEMPLATES_PATH . "/rightPanel.php");
-    ?>
 </div>
 <?php
 require_once(TEMPLATES_PATH . "/footer.php");
 ?>
 
 <script>
+
     function getVals() {
         // Get slider values
         var parent = this.parentNode;

@@ -16,10 +16,6 @@ require_once(TEMPLATES_PATH . "/header.php");
         </pre>
             </form>
         </div>
-
-        <?php
-        require_once(TEMPLATES_PATH . "/rightPanel.php");
-        ?>
     </div>
 <?php
 require_once(TEMPLATES_PATH . "/footer.php");

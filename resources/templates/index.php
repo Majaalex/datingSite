@@ -8,9 +8,6 @@ require_once(TEMPLATES_PATH . "/header.php");
         <div id="content">
             <!-- content -->
         </div>
-        <?php
-        require_once(TEMPLATES_PATH . "/rightPanel.php");
-        ?>
     </div>
 <?php
 require_once(TEMPLATES_PATH . "/footer.php");

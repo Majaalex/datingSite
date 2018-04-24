@@ -1,9 +1,4 @@
 <?php session_start();
-if(isset($_SESSION['id'])){
-    echo "Welcome " . $_SESSION['id'] . "!";
-} else {
-    echo "You are not logged in";
-}
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
     "http://www.w3.org/TR/html4/strict.dtd">
@@ -22,7 +17,7 @@ if(isset($_SESSION['id'])){
         <td>
             <ul>
                 <?php if (isset($_SESSION['id'])){
-                    echo "<li><a href =" . url_for("profile.php") . ">" . h($_SESSION['id']) . "</a></li>";
+                    echo "<li><a href =" . url_for("profile.php"). "?=" .  h($_SESSION['id'])  . ">" . h($_SESSION['id']) . "</a></li>";
                 } ?>
                 <li><a href=<?php echo url_for("browse.php")?>>Browse</a></li>
             </ul>

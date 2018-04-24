@@ -9,9 +9,6 @@ session_destroy();
         <div id="content">
             <h1>logout</h1>
         </div>
-        <?php
-        require_once(TEMPLATES_PATH . "/rightPanel.php");
-        ?>
     </div>
 <?php
 require_once(TEMPLATES_PATH . "/footer.php");
