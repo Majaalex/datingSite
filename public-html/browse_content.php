@@ -38,8 +38,6 @@ if (isset($_GET['order'])){
             break;
     }
 }
-var_dump($_POST);
-
 // Queries based on what the user has set in browse.php query
 $count = db::instance()->count("SELECT * FROM users WHERE salary > ? AND salary < ? OR gender = ? OR gender = ? OR gender = ?",
     array($_GET['minSalary'], $_GET['maxSalary'] , $_GET['female'], $_GET['male'], $_GET['other']));
@@ -88,6 +86,7 @@ echo "</table>";
 
     // gets data from localstorage which is then used to convert the loaded data on the page to corresponding currency
     $(document).ready(function () {
+        currency = $('#currencySelect').find(":selected").text();
         /*$.get('https://openexchangerates.org/api/latest.json', {app_id: '9d60f5c4e53c43898ee378509406c5c9'}, function (data) {
             var jsonData = JSON.stringify(data.rates);
             localStorage.setItem("openCurrency", jsonData);

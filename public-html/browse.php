@@ -105,20 +105,14 @@ require_once(TEMPLATES_PATH . "/header.php");
                                             }
                                             ?>
                                         </script>
+
                                         <?php
-
-
                                         if (isset($_SESSION['id'])) {
                                             echo "<option selected='selected'>" . $user[0]["currency"] . "</option>";
                                         }
                                         require_once TEMPLATES_PATH . '/currency.html';
                                         ?>
-                                        <script>
-                                            $(document).ready(function () {
-                                                currency = $("currencySelect").find(":selected").text();
-                                            });
 
-                                        </script>
                                     </select></label>
                             </td>
                             <td>
@@ -182,6 +176,7 @@ require_once(TEMPLATES_PATH . "/header.php");
 
     // gets data from localstorage which is then used to convert the loaded data on the page to corresponding currency
     $(document).ready(function () {
+        currency = $('#currencySelect').find(":selected").text();
         /*$.get('https://openexchangerates.org/api/latest.json', {app_id: '9d60f5c4e53c43898ee378509406c5c9'}, function (data) {
             var jsonData = JSON.stringify(data.rates);
             localStorage.setItem("openCurrency", jsonData);
