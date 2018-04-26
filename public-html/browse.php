@@ -176,11 +176,14 @@ require_once(TEMPLATES_PATH . "/header.php");
 
     // gets data from localstorage which is then used to convert the loaded data on the page to corresponding currency
     $(document).ready(function () {
+        if (localStorage.getItem("openCurrency") === null){
+            $.get('https://openexchangerates.org/api/latest.json', {app_id: '9d60f5c4e53c43898ee378509406c5c9'}, function (data) {
+                var jsonData = JSON.stringify(data.rates);
+                localStorage.setItem("openCurrency", jsonData);
+                console.log("Stored data in localstorage!");
+            });
+        }
         currency = $('#currencySelect').find(":selected").text();
-        /*$.get('https://openexchangerates.org/api/latest.json', {app_id: '9d60f5c4e53c43898ee378509406c5c9'}, function (data) {
-            var jsonData = JSON.stringify(data.rates);
-            localStorage.setItem("openCurrency", jsonData);
-        });*/
         var jsonRetrieveData = localStorage.getItem("openCurrency");
         jsonRetrieveData = JSON.parse(jsonRetrieveData);
         jsonRetrieveData = jQuery.makeArray(jsonRetrieveData);
