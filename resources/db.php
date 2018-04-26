@@ -1,3 +1,4 @@
+
 <?php
 class db {
     private static $instance = null;
@@ -40,4 +41,3 @@ class db {
         return $this->result[0][$key];
     }
 }
-?>

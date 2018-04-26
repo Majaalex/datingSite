@@ -3,36 +3,85 @@
 require_once("../resources/config.php");
 require_once "../resources/functions.php";
 require_once(TEMPLATES_PATH . "/header.php");
+
 ?>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <div id="container">
     <div id="content">
         <h1>Browse</h1>
-        <div class="filter">
+        <div id="filter-container">
+            <div id="filter-content">
+                <form id="browse-set">
             <table>
                 <tr>
                     <td>
-                        Searching for:
-                        <label for="male">Male:</label>
-                        <input type="checkbox" value="male" id="male">
-                        <label for="female">Female:</label>
-                        <input type="checkbox" value="female" id="female">
-                        <label for="other">Other:</label>
-                        <input type="checkbox" value="other" id="other">
+                        Searching for:<br>
+                        <label for="male">Male:</label> <input type="checkbox" value="true" name="male"><br>
+                        <label for="female">Female:</label> <input type="checkbox" value="true" name="female"><br>
+                        <label for="other">Other:</label> <input type="checkbox" value="true" name="other"><br>
                     </td>
                     <td>
-                        <!-- This block can be reused as many times as needed -->
-                        <div class="range-slider-div">
-                            <section class="range-slider">
-                                <span class="rangeValues"></span>
-                                <input value="<?= $small = 0 ?>" min="0" max="300000" step="100" type="range">
-                                <input value="<?= $big = 0 ?>" min="0" max="500000" step="500" type="range">
-                            </section>
-                        </div>
+
+                        <label>Minimum salary:
+                            <select name="minSalary">
+                                <option value="0">0</option>
+                                <option value="500">500</option>
+                                <option value="1000">1 000</option>
+                                <option value="2500">2 500</option>
+                                <option value="5000">5 000</option>
+                                <option value="10000">10 000</option>
+                                <option value="25000">25 000</option>
+                                <option value="50000">50 000</option>
+                                <option value="100000">100 000</option>
+                                <option value="250000">250 000</option>
+                                <option value="500000">500 000</option>
+                                <option value="1000000">1 000 000</option>
+                        </select></label>
+                        <label>
+                            <?php
+                            if (isset($_SESSION['id'])){
+                                $curr = db::instance()->get("SELECT currency FROM users WHERE username = ?", array($_SESSION['id']));
+                                echo $curr[0]["currency"];
+                            } else {
+                                echo "USD";
+                            }
+                            ?>
+                        </label>
+                    </td>
+                    <td>
+                        <label>Maximum salary:
+                            <select name="maxSalary">
+                                <option value="500">500</option>
+                                <option value="1000">1 000</option>
+                                <option value="2500">2 500</option>
+                                <option value="5000">5 000</option>
+                                <option value="10000">10 000</option>
+                                <option value="25000">25 000</option>
+                                <option value="50000">50 000</option>
+                                <option value="100000">100 000</option>
+                                <option value="250000">250 000</option>
+                                <option value="500000">500 000</option>
+                                <option value="1000000">1 000 000</option>
+                                <option value="2000000">2 000 000+</option>
+                        </select></label>
+                        <label>
+                            <?php
+                            if (isset($_SESSION['id'])){
+                                echo $curr[0]["currency"];
+                            } else {
+                                echo "USD";
+                            }
+                            ?>
+                        </label>
+                    </td>
+                    <td>
+                        <input type="button" value="Search" id="filter-button">
                     </td>
                 </tr>
             </table>
+                </form>
+            </div>
         </div>
-
         <?php
         $id = 0;
         $array = db::instance()->get("SELECT * FROM users", array());
@@ -40,21 +89,28 @@ require_once(TEMPLATES_PATH . "/header.php");
         echo "<div id='cont'>";
         echo "<div id='browse'>";
         echo "<table id='browse-tbl'>";
+
+        // Loops out all requested values in a neat table format
         $i = 0;
         for ($row = 0; $row < $count / 5; $row++){
             echo "<tr>";
             for ($col = 0; $col < 5; $col++){
-                if ($i / 5 <= 1){
+                if ($i < $count){
                     echo "<td class='browse'>";
                     echo "<div>";
                     echo "<ul>";
-                    echo "<li>" . $array[$i]["username"] . "</li>";
-                    echo "<li>" . $array[$i]["firstname"] . " " . $array[$i]["lastname"] . "</li>";
-                    echo "<li>" . $array[$i]["about"] . "</li>";
-                    echo "<li>" . $array[$i++]["salary"] . "</li>";
+                    echo "<li><a href='" . url_for("profile.php"). "?user=".  h($array[$i]["username"])  . "'>" . h($array[$i]["username"]) . "</a></li>";
+                    echo "<li>" . h($array[$i]["firstname"]) . " " . h($array[$i]["lastname"]) . "</li>";
+                    echo "<li>" . h($array[$i]["about"]) . "</li>";
+                    if (isset($_SESSION['id'])){
+                        echo "<li>" . h($array[$i]["email"]) . "</li>";
+                    }
+                    echo "<li>" . h($array[$i++]["salary"]) . "</li>";
                     echo "</ul>";
                     echo "</div>";
                     echo "</td>";
+                } else {
+                    break;
                 }
             }
             echo "</tr>";
@@ -64,44 +120,18 @@ require_once(TEMPLATES_PATH . "/header.php");
         echo "</div>";
         ?>
     </div>
-    <?php
-    require_once(TEMPLATES_PATH . "/rightPanel.php");
-    ?>
 </div>
+<script>
+    // sends form data as GET to browse_content.php, and returns it dynamically based on the filter options
+    $(document).ready(function(){
+        $("#filter-button").click(function(){
+            var get_data = $('#browse-set').serialize();
+            $("#browse").load("browse_content.php", get_data);
+
+        });
+    });
+</script>
 <?php
 require_once(TEMPLATES_PATH . "/footer.php");
 ?>
 
-<script>
-    function getVals() {
-        // Get slider values
-        var parent = this.parentNode;
-        var slides = parent.getElementsByTagName("input");
-        var slide1 = parseFloat(slides[0].value);
-        var slide2 = parseFloat(slides[1].value);
-        // Neither slider will clip the other, so make sure we determine which is larger
-        if (slide1 > slide2) {
-            var tmp = slide2;
-            slide2 = slide1;
-            slide1 = tmp;
-        }
-
-        var displayElement = parent.getElementsByClassName("rangeValues")[0];
-        displayElement.innerHTML = slide1 + " - " + slide2;
-    }
-
-    window.onload = function () {
-        // Initialize Sliders
-        var sliderSections = document.getElementsByClassName("range-slider");
-        for (var x = 0; x < sliderSections.length; x++) {
-            var sliders = sliderSections[x].getElementsByTagName("input");
-            for (var y = 0; y < sliders.length; y++) {
-                if (sliders[y].type === "range") {
-                    sliders[y].oninput = getVals;
-                    // Manually trigger event first time to display values
-                    sliders[y].oninput();
-                }
-            }
-        }
-    }
-</script>

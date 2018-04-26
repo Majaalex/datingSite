@@ -1,4 +1,3 @@
-
 <?php
 require_once '../resources/config.php';
 require_once '../resources/db.php';
@@ -25,6 +24,10 @@ if (isset($_POST['signup'])) {
     $salary = $_POST['salary'];
     $currency = $_POST['currency'];
     $gender = $_POST['gender'];
+    $prefMale = $_POST['genderM'];
+    $preFemale = $_POST['genderF'];
+    $prefOther = $_POST['genderO'];
+    $preference = $prefMale + $preFemale + $prefOther;
 
     $sql_user_pdo = db::instance()->count("SELECT * FROM users WHERE username = ?", array("$user"));
     $sql_email_pdo = db::instance()->count("SELECT * FROM users WHERE email = ?", array("$email"));
@@ -36,9 +39,12 @@ if (isset($_POST['signup'])) {
     }else if(db::instance()->count("SELECT * FROM users WHERE email = ?", array("$email")) > 0){
         $email_error = "Email already in use";
     }else{
+        //PASSWORD HASHING
+        //$hashedPass = password_hash($pass, PASSWORD_DEFAULT);
         db::instance()->action(
-            "INSERT INTO users (username, firstname, lastname, password, email, postal, about, age, salary, currency, gender) 
-            VALUES (?,?,?,?,?,?,?,?,?,?,?)", array("$user", "$firstName", "$lastName", "$pass","$email", "$postal", "$about", "$age", "$salary", "$currency", "$gender" ));
+            "INSERT INTO users (username, firstname, lastname, password, email, postal, about, age, salary, currency, gender, preference) 
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", array("$user", "$firstName", "$lastName", "$pass","$email", "$postal", "$about", "$age", "$salary", "$currency", "$gender", "$preference" ));
+        header("Location: ./login.php");
         //TODO HEADER to main page
     }
 }
