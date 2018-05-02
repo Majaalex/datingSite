@@ -126,44 +126,17 @@ require_once(TEMPLATES_PATH . "/header.php");
         <?php
 
         $id = 0;
-        $array = db::instance()->get("SELECT * FROM users", array());
+        $array = db::instance()->get("SELECT * FROM users ORDER BY salary", array());
         $count = db::instance()->count("SELECT * FROM users", array("0"));
         echo "<div id='cont'>";
         echo "<div id='browse'>";
-        echo "<table id='browse-tbl'>";
-
         // Loops out all requested values in a neat table format
-        $i = 0;
-        for ($row = 0; $row < $count / 5; $row++) {
-            echo "<tr>";
-            for ($col = 0; $col < 5; $col++) {
-                if ($i < $count || $i < 10) {
-                    echo "<td class='browse'>";
-                    echo "<div>";
-                    echo "<ul>";
-                    echo "<li><a href='" . url_for("profile.php") . "?user=" . h($array[$i]["username"]) . "'>" . h($array[$i]["username"]) . "</a></li>";
-                    echo "<li>" . h($array[$i]["firstname"]) . " " . h($array[$i]["lastname"]) . "</li>";
-                    echo "<li>" . h($array[$i]["about"]) . "</li>";
-                    if (isset($_SESSION['id'])) {
-                        echo "<li>" . h($array[$i]["email"]) . "</li>";
-                    }
-                    echo "<li class='salary'>" . h($array[$i++]["salary"]) . "</li>";
-                    echo "</ul>";
-                    echo "</div>";
-                    echo "</td>";
-                } else {
-                    break;
-                }
-            }
-            echo "</tr>";
-        }
-        echo "</table>";
+        require_once "browse_tbl_content.php";
         echo "</div>";
         echo "</div>";
         ?>
     </div>
 </div>
-
 <script>
     // sends form data as GET to browse_content.php, and returns it dynamically based on the filter options
     $(document).ready(function () {
@@ -175,26 +148,19 @@ require_once(TEMPLATES_PATH . "/header.php");
 
 
     // gets data from localstorage which is then used to convert the loaded data on the page to corresponding currency
+
+
     $(document).ready(function () {
-        if (localStorage.getItem("openCurrency") === null){
-            $.get('https://openexchangerates.org/api/latest.json', {app_id: '9d60f5c4e53c43898ee378509406c5c9'}, function (data) {
-                var jsonData = JSON.stringify(data.rates);
-                localStorage.setItem("openCurrency", jsonData);
-                console.log("Stored data in localstorage!");
-            });
-        }
-        currency = $('#currencySelect').find(":selected").text();
-        var jsonRetrieveData = localStorage.getItem("openCurrency");
-        jsonRetrieveData = JSON.parse(jsonRetrieveData);
-        jsonRetrieveData = jQuery.makeArray(jsonRetrieveData);
-        //goes through each li containing salary and updates the value
-        $(".salary").each(function () {
-            var text = $(this).text();
-            var converted = text * jsonRetrieveData[0][currency];
-            $(this).text(converted.toFixed(2) + " " + currency)
+        $('#browse').find('a').on('click', function (e) {
+            e.preventDefault();
+            $('#browse').children().hide();
+            var $href = $(this).attr("href");
+            $("#" + $href).show();
         })
-    });
+    })
+
 </script>
+
 <?php
 require_once(TEMPLATES_PATH . "/footer.php");
 ?>
