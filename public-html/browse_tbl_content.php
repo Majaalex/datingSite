@@ -42,17 +42,18 @@ if (isset($_GET['order'])) {
             $order = 'lastname DESC';
     }
 }
+
+// If a session is active, gets the users gender to be used in filtering
 if (isset($_SESSION['id'])) {
-    // If a user is logged in, gets the users gender
     $preference = 0;
+    // query for the gender
     $find = db::instance()->get("SELECT gender FROM users WHERE username = ?", array($_SESSION['id']));
+    // preference is a number system where 1 is male, 2 is female, 4 is other, added together if multiple preferences
     switch ($find[0]['gender']) {
         case "male":
-            echo "male";
             $preference = 1;
             break;
         case "female":
-            echo "female";
             $preference = 2;
             break;
         case "other":
@@ -64,6 +65,7 @@ if (isset($_SESSION['id'])) {
 // Gets the total # of results to input in the paginator
 if (!isset($_GET['minSalary'])) {
     if (isset($_SESSION['id'])) {
+        // returns same query as row 71 below with preference added to the query
         $count = initialCountQueryAll($preference);
     } else {
         $count = db::instance()->count("
@@ -86,31 +88,35 @@ if (!isset($_GET['minSalary'])) {
             array($_GET['minSalary'], $_GET['maxSalary'], $_GET['female'], $_GET['male'], $_GET['other'], $_GET['minAge'], $_GET['maxAge']));
     }
 }
-$counter = 0;
-$i = 0;
-$divPageName = "page";
-
 //  paginator current page setup
-$rowsPerPage = 10;
+// CHANGE THIS # TO SET AMOUNT OF USERS SHOWN PER PAGE
+$rowsPerPage = 15;
 // Makes sure a page shows if there's less than 10 results
 if ($count < 11) {
     $totalPages = 1;
 } else {
     $totalPages = ceil($count / $rowsPerPage) - 1;
 }
+// if page is set and a number
 if (isset($_GET['page']) && is_numeric($_GET['page'])) {
     $currentPage = (int)$_GET['page'];
 } else {
     $currentPage = 1;
 }
+// page count can't be higher than max amount of pages
 if ($currentPage > $totalPages) {
     $currentPage = $totalPages;
 }
+// page count can't go to 0 or less
 if ($currentPage < 1) {
     $currentPage = 1;
 }
+// offset to be used in MYSQL queries
 $offset = ($currentPage - 1) * $rowsPerPage;
 // paginator setup ends
+
+// QUERY SECTION:  updates $count and creates $array, so the page content can be loaded
+// Initial query when browse is loaded
 if (!isset($_GET['minSalary'])) {
     $array = db::instance()->get("
 SELECT * 
@@ -124,6 +130,8 @@ FROM users
 LIMIT $rowsPerPage",
         array("0"));
 } else {
+    // And if content is just beign reloaded on IE page change or filter uppdate
+    // Session is checked, and preference is taken into consideration
     if (isset($_SESSION['id'])) {
         // If a user is logged in, gets the users gender
         $preference = 0;
@@ -145,6 +153,7 @@ LIMIT $rowsPerPage",
         $count = $result[0];
         $array = $result[1];
     } else {
+    // However if no user is logged in, it shows all users
         $count = db::instance()->count("
             SELECT id 
             FROM users 
@@ -168,9 +177,16 @@ LIMIT $rowsPerPage",
             LIMIT $offset, $rowsPerPage",
             array($_GET['minSalary'], $_GET['maxSalary'], $_GET['female'], $_GET['male'], $_GET['other'], $_GET['minAge'], $_GET['maxAge']));
     }
-}
-// Loads up all the content to be sent forward
+} // QUERY SECTION ENDS
+
+// Index for which user to print
+$i = 0;
+$divPageName = "page";
+
+
+// MAIN PAGE CONTENT: Loads up all the content to be sent forward
 for ($divPage = 0; $divPage < $totalPages; $divPage++) {
+    // Sets a counter to limit amount of users
     $counter = 0;
     echo "<div id='$divPageName$divPage'>";
     echo "<table id='browse-tbl'>";
@@ -180,7 +196,7 @@ for ($divPage = 0; $divPage < $totalPages; $divPage++) {
         // make columns
         for ($col = 0; $col < 5; $col++) {
             // makes sure we don't create more than 10 inputs per div
-            if ($i < $count && $counter < 10) {
+            if ($i < $count && $counter < $rowsPerPage) {
                 echo "<td class='browse'>";
                 echo "<div>";
                 echo "<ul>";
@@ -195,13 +211,15 @@ for ($divPage = 0; $divPage < $totalPages; $divPage++) {
                 echo "</ul>";
                 echo "</div>";
                 echo "</td>";
-            }
-        }
+            } // end if
+        } // end for col
         echo "</tr>";
-    }
+    } // end for row
     echo "</table>";
     echo "</div>";
-}
+} // MAIN PAGE CONTENT ENDS
+
+// PAGINATOR CONTENT: printing out all links for page navigation
 $range = 5;
 echo "<div class='paginator'>";
 if ($currentPage > 1) {
@@ -244,15 +262,21 @@ echo "</div>";
 ?>
 
 <script>
+    // Function to convert values to whatever is set in the filter
     $(document).ready(function () {
-        /*if (localStorage.getItem("openCurrency") === null){
+        // if user has no currency rates, they will be set
+        if (localStorage.getItem("openCurrency") === null){
+            // Queries openechangerates for the latest curreny exchange rates
            $.get('https://openexchangerates.org/api/latest.json', {app_id: '9d60f5c4e53c43898ee378509406c5c9'}, function (data) {
                 var jsonData = JSON.stringify(data.rates);
+                // And stores the ratios in localstorage
                 localStorage.setItem("openCurrency", jsonData);
                 console.log("Stored data in localstorage!");
             });
-        }*/
+        }
+        // Gets the selected currency
         currency = $('#currencySelect').find(":selected").text();
+        // Gets the currency ratio from localstorage
         var jsonRetrieveData = localStorage.getItem("openCurrency");
         jsonRetrieveData = JSON.parse(jsonRetrieveData);
         jsonRetrieveData = jQuery.makeArray(jsonRetrieveData);
@@ -263,15 +287,17 @@ echo "</div>";
             $(this).text(converted.toFixed(2) + " " + currency)
         })
     });
+    // Reloads the page content when page link is clicked
     $(document).ready(function () {
         $("#browse").find('.page').on('click', function (e) {
             e.preventDefault();
+            // Gets page number
             var $href = $(this).attr("href");
+            // Strips page from the string
             var page = $href.substr(4);
             var get_data = $('#browse-set').serialize() + "&page=" + page;
+            // Send data from filter + page# and load a new page
             $("#browse").load("browse_tbl_content.php", get_data);
         })
     });
-
-
 </script>
