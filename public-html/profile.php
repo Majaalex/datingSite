@@ -7,8 +7,10 @@ require_once(TEMPLATES_PATH . "/header.php");
     <div id="container">
         <div id="content">
             <?php
-            echo $_SESSION['id'];
-            $query = db::instance()->get("SELECT * FROM users WHERE username = ?",array($_SESSION['id']));
+            echo $_SESSION['id'] . "<br>";
+            $user = $_GET['user'];
+            echo $user . " AFASDFASDFASDFASDF <br>";
+            $query = db::instance()->get("SELECT * FROM users WHERE username = ?",array($user));
             var_dump($query);
             ?>
             <table>

@@ -3,12 +3,17 @@
 require_once("../resources/config.php");
 require_once "../resources/functions.php";
 require_once(TEMPLATES_PATH . "/header.php");
-
+if (isset($_SESSION['id'])){
+    $loggedIn = true;
+} else {
+    $loggedIn = false;
+}
 ?>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <div id="container">
     <div id="content">
         <h1>Browse</h1>
+        <!-- Search bar form starts-->
         <div id="filter-container">
             <div id="filter-content">
                 <form id="browse-set">
@@ -16,10 +21,9 @@ require_once(TEMPLATES_PATH . "/header.php");
                         <tr>
                             <td>
                                 Searching for:<br>
-                                <label for="male">Male:</label> <input type="checkbox" value="true" name="male"><br>
-                                <label for="female">Female:</label> <input type="checkbox" value="true"
-                                                                           name="female"><br>
-                                <label for="other">Other:</label> <input type="checkbox" value="true" name="other"><br>
+                                <label for="male">Male: <input type="checkbox" value="true" name="male" checked="checked"><br></label>
+                                <label for="female">Female: <input type="checkbox" value="true" name="female" checked="checked"><br></label>
+                                <label for="other">Other: <input type="checkbox" value="true" name="other" checked="checked"><br></label>
                             </td>
                             <td>
 
@@ -52,18 +56,18 @@ require_once(TEMPLATES_PATH . "/header.php");
                             <td>
                                 <label>Maximum salary:
                                     <select name="maxSalary">
-                                        <option value="500">500</option>
-                                        <option value="1000">1 000</option>
-                                        <option value="2500">2 500</option>
-                                        <option value="5000">5 000</option>
-                                        <option value="10000">10 000</option>
-                                        <option value="25000">25 000</option>
-                                        <option value="50000">50 000</option>
-                                        <option value="100000">100 000</option>
-                                        <option value="250000">250 000</option>
-                                        <option value="500000">500 000</option>
-                                        <option value="1000000">1 000 000</option>
-                                        <option value="2000000">2 000 000+</option>
+                                        <option value="501">500</option>
+                                        <option value="1001">1 000</option>
+                                        <option value="2501">2 500</option>
+                                        <option value="5001">5 000</option>
+                                        <option value="10001">10 000</option>
+                                        <option value="25001">25 000</option>
+                                        <option value="50001">50 000</option>
+                                        <option value="100001">100 000</option>
+                                        <option value="250001">250 000</option>
+                                        <option value="500001">500 000</option>
+                                        <option value="1000001">1 000 000</option>
+                                        <option value="2000001" selected="selected">2 000 000+</option>
                                     </select></label>
                                 <label>
                                     <?php
@@ -76,9 +80,32 @@ require_once(TEMPLATES_PATH . "/header.php");
                                 </label>
                             </td>
                             <td>
+
+                                <label>Minimum age:
+                                    <select name="minAge">
+                                        <option value="17" selected="selected">18</option>
+                                        <option value="24">25</option>
+                                        <option value="29">30</option>
+                                        <option value="39">40</option>
+                                        <option value="49">50</option>
+                                        <option value="59">60</option>
+                                    </select></label>
+                            </td>
+                            <td>
+                                <label>Maximum age:
+                                    <select name="maxAge">
+                                        <option value="21">20</option>
+                                        <option value="26">25</option>
+                                        <option value="31">30</option>
+                                        <option value="41">40</option>
+                                        <option value="51">50</option>
+                                        <option value="61" selected="selected">60+</option>
+                                    </select></label>
+                            </td>
+                            <td>
                                 <label>Order by:
                                     <select name="order">
-                                        <option value="1">Salary ascending</option>
+                                        <option value="1" selected="selected">Salary ascending</option>
                                         <option value="2">Salary descending</option>
                                         <option value="3">First name ascending</option>
                                         <option value="4">First name descending</option>
@@ -125,12 +152,8 @@ require_once(TEMPLATES_PATH . "/header.php");
         </div>
         <?php
 
-        $id = 0;
-        $array = db::instance()->get("SELECT * FROM users ORDER BY salary", array());
-        $count = db::instance()->count("SELECT * FROM users", array("0"));
         echo "<div id='cont'>";
         echo "<div id='browse'>";
-        // Loops out all requested values in a neat table format
         require_once "browse_tbl_content.php";
         echo "</div>";
         echo "</div>";
@@ -141,23 +164,11 @@ require_once(TEMPLATES_PATH . "/header.php");
     // sends form data as GET to browse_content.php, and returns it dynamically based on the filter options
     $(document).ready(function () {
         $("#filter-button").click(function () {
-            var get_data = $('#browse-set').serialize();
-            $("#browse").load("browse_content.php", get_data);
+            var get_data = $('#browse-set').serialize()+ "&page=1";
+            $("#browse").load("browse_tbl_content.php", get_data);
         });
     });
 
-
-    // gets data from localstorage which is then used to convert the loaded data on the page to corresponding currency
-
-
-    $(document).ready(function () {
-        $('#browse').find('a').on('click', function (e) {
-            e.preventDefault();
-            $('#browse').children().hide();
-            var $href = $(this).attr("href");
-            $("#" + $href).show();
-        })
-    })
 
 </script>
 

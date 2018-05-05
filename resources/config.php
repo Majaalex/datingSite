@@ -58,7 +58,7 @@ define("WWW_ROOT", $doc_root);
     Error reporting.
 */
 ini_set("error_reporting", "true");
-error_reporting(E_ALL|E_STRCT);
+error_reporting(-1);
 
 require_once "functions.php";
 require_once "db.php";
