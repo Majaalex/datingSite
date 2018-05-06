@@ -267,7 +267,7 @@ echo "</div>";
         // if user has no currency rates, they will be set
         if (localStorage.getItem("openCurrency") === null){
             // Queries openechangerates for the latest curreny exchange rates
-           $.get('https://openexchangerates.org/api/latest.json', {app_id: '9d60f5c4e53c43898ee378509406c5c9'}, function (data) {
+           $.get('https://openexchangerates.org/api/latest.json', {app_id: ''}, function (data) {
                 var jsonData = JSON.stringify(data.rates);
                 // And stores the ratios in localstorage
                 localStorage.setItem("openCurrency", jsonData);
