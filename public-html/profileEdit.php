@@ -1,57 +1,47 @@
 <?php
-    require_once '../resources/config.php';
-    require_once '../resources/templates/header.php';
-    include('connect.php');
-                                                                                                                        //TODO COMMENT CODE
-    ?>
+require_once '../resources/config.php';
+require_once '../resources/templates/header.php';
+?>
 
+<?php
+
+$query = db::instance()->get("SELECT * FROM users WHERE username = ?",array($_SESSION['id']));
+$currency = $query[0]["currency"];
+$gender = $query[0]["gender"];
+$pref = $query[0]["preference"];
+                                                                                                                        //TODO COMMENT CODE
+?>
     <!DOCTYPE html>
     <head>
         <meta charset="utf-8">
-        <title>Signup to find your partner</title>
     </head>
 
     <div class="centered">
-        <form method="post" action="signup.php" id="register_form">
-            <h1>Sign up</h1>
+        <form method="post" action="profileConnect.php" id="register_form">
+            <h1>Edit</h1>
             <div>
-                <input type="text" name="firstname" placeholder="First Name" value="<?php echo "$firstName"; ?>" required>
-            </div>
-            <div>
-                <input type="text" name="lastname" placeholder="Last Name" value="<?php echo "$lastName"; ?>" required>
-            </div>
-            <div <?php if (isset($name_error)): ?> class="form_error" id="test" <?php endif ?> >
-                <input type="text" name="username" placeholder="Username" value="<?php echo $user; ?>" required>
-                <?php if (isset($name_error)): ?>
-                    <span><?php echo $name_error; ?></span>
-                <?php endif ?>
+                <input type="text" name="firstname" placeholder="First Name" value="<?php echo $query[0]["firstname"]; ?>" required>
             </div>
             <div>
-                <input type="password" name="password" placeholder="Password" required >
-            </div>
-            <div <?php if (isset($passValidation_error)): ?> class="form_error" <?php endif ?> >
-                <input type="password" name="passwordValidation" placeholder="Password" >
-                <?php if (isset($passValidation_error)): ?>
-                    <span><?php echo $passValidation_error; ?></span>
-                <?php endif ?>
+                <input type="text" name="lastname" placeholder="Last Name" value="<?php echo $query[0]["lastname"]; ?>" required>
             </div>
             <div <?php if (isset($email_error)): ?> class="form_error" <?php endif ?> >
-                <input type="email" name="email" placeholder="Email" value="<?php echo $email; ?>" required>
+                <input type="email" name="email" placeholder="Email" value="<?php echo $query[0]["email"]; ?>" required>
                 <?php if (isset($email_error)): ?>
                     <span><?php echo $email_error; ?></span>
                 <?php endif ?>
             </div>
             <div>
-                <input type="number"  name="postalCode" placeholder="Postal code ex.00200" value="<?php echo "$postal"; ?>" required>
+                <input type="number"  name="postalCode" placeholder="Postal code ex.00200" value="<?php echo $query[0]["postal"]; ?>" required>
             </div>
             <div>
-                <input type="text" name="about" placeholder="About me" value="<?php echo "$about"; ?>" required >
+                <input type="text" name="about" placeholder="About me" value="<?php echo $query[0]["about"]; ?>" required >
             </div>
             <div>
-                <input type="number"  name="age" placeholder="Age" value="<?php echo "$age"; ?>" required>
+                <input type="number"  name="age" placeholder="Age" value="<?php echo $query[0]["age"]; ?>" required>
             </div>
             <div>
-                <input type="number" name="salary" placeholder="Salary" value="<?php echo "$salary"; ?>" required>
+                <input type="number" name="salary" placeholder="Salary" value="<?php echo $query[0]["salary"]; ?>" required>
             </div>
             <div>
                 <label>Currency:                <!--TODO MAKE currency stay as the selected one -->
@@ -240,11 +230,12 @@
                         <option <?php if ($gender == "other") {echo 'selected';} ?> value="other">Other</option>
                     </select></label>
             </div>
-            Preference:        <input type="checkbox" name="genderM" value="1" checked/> Male
-            <input type="checkbox" name="genderF" value="2" /> Female
-            <input type="checkbox" name ="genderO" value="4" /> Other
+            Preference:
+            <input type="checkbox" name="genderM" value="1" <?php if ($pref == 1 ||$pref == 3 || $pref == 5 ||$pref == 7) {echo 'checked';} ?>/> Male
+            <input type="checkbox" name="genderF" value="2" <?php if ($pref == 2 ||$pref == 3 || $pref == 6 ||$pref == 7) {echo 'checked';} ?>/> Female
+            <input type="checkbox" name="genderO" value="4" <?php if ($pref == 4 ||$pref == 5 || $pref == 6 ||$pref == 7) {echo 'checked';} ?>/> Other
             <div>
-                <input type="submit" value="Sign up" name="signup"/>
+                <input type="submit" value="Save" name="save"/>
             </div>
         </form>
     </div>
@@ -252,4 +243,3 @@
 <?php
 require_once '../resources/templates/footer.php';
 ?>
-
