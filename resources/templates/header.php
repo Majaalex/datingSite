@@ -8,6 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Simple Site</title>
     <link rel="stylesheet" type="text/css" href="http://localhost/datingsite/public-html/css/style.css">
+    <link rel="stylesheet" type="text/css" href="http://localhost/datingsite/public-html/css/maps.css">
 </head>
 
 <body>
@@ -16,9 +17,9 @@
     <tr>
         <td>
             <ul>
-                <?php if (isset($_SESSION['id'])){
-                    echo "<li><a href='" . url_for("profile.php"). "?user=".  h($_SESSION['id'])  . "'>" . h($_SESSION['id']) . "</a></li>";
-                } ?>
+                <?php if (isset($_SESSION['id'])) {
+                    echo "<li><a href='" . url_for("profile.php") . "?user=" . h($_SESSION['id']) . "'>" . h($_SESSION['id']) . "</a></li>";
+                }?>
                 <li><a href='<?php echo url_for("browse.php")?>'>Browse</a></li>
             </ul>
         </td>
@@ -29,8 +30,7 @@
                     echo "<li><a href ='" . url_for("signup.php") . "'>Sign up</a></li>";
                 } elseif (isset($_SESSION['id'])) {
                     echo "<li><a href ='" . url_for("logout.php") . "'>Log out</a></li>";
-                }
-                ?>
+                }?>
             </ul>
         </td>
     </tr>

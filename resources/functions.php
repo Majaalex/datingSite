@@ -22,9 +22,10 @@ function h($string="")
     return htmlspecialchars($string);
 }
 
-// takes a preference (1, 2, 4
+// takes a preference and returns the corresponding count and array
 function browseQuery($pref, $offset, $rowsPerPage, $order){
     switch ($pref){
+
         case 1:
             $count = db::instance()->count("
             SELECT id 
@@ -36,7 +37,7 @@ function browseQuery($pref, $offset, $rowsPerPage, $order){
             AND age < ?
             AND (preference = 1 OR preference = 3 OR preference = 5 OR preference = 7)
             LIMIT $offset, $rowsPerPage",
-            array($_GET['minSalary'], $_GET['maxSalary'] , $_GET['female'], $_GET['male'], $_GET['other'], $_GET['minAge'], $_GET['maxAge']));
+                array($_GET['minSalary'], $_GET['maxSalary'] , $_GET['female'], $_GET['male'], $_GET['other'], $_GET['minAge'], $_GET['maxAge']));
 
             $array = db::instance()->get("
             SELECT firstname,lastname,username, email, salary,about 
@@ -52,6 +53,7 @@ function browseQuery($pref, $offset, $rowsPerPage, $order){
                 array($_GET['minSalary'], $_GET['maxSalary'] , $_GET['female'], $_GET['male'], $_GET['other'], $_GET['minAge'], $_GET['maxAge']));
             return array($count, $array);
             break;
+
         case 2:
             $count = db::instance()->count("
             SELECT id 
@@ -79,6 +81,7 @@ function browseQuery($pref, $offset, $rowsPerPage, $order){
                 array($_GET['minSalary'], $_GET['maxSalary'] , $_GET['female'], $_GET['male'], $_GET['other'], $_GET['minAge'], $_GET['maxAge']));
             return array($count, $array);
             break;
+
         case 4:
             $count = db::instance()->count("
             SELECT id 
@@ -111,6 +114,7 @@ function browseQuery($pref, $offset, $rowsPerPage, $order){
 
 function initialCountQueryAll($pref){
     switch ($pref){
+
         case 1:
             $count = db::instance()->count("
             SELECT id 
@@ -119,6 +123,7 @@ function initialCountQueryAll($pref){
                 array("0"));
             return $count;
             break;
+
         case 2:
             $count = db::instance()->count("
             SELECT id 
@@ -127,6 +132,7 @@ function initialCountQueryAll($pref){
                 array("0"));
             return $count;
             break;
+
         case 4:
             $count = db::instance()->count("
             SELECT id 
@@ -141,6 +147,7 @@ function initialCountQueryAll($pref){
 
 function initialCountQueryFilter($pref){
     switch ($pref){
+
         case 1:
             $count = db::instance()->count("
             SELECT id 
@@ -154,6 +161,7 @@ function initialCountQueryFilter($pref){
                 array($_GET['minSalary'], $_GET['maxSalary'], $_GET['female'], $_GET['male'], $_GET['other'], $_GET['minAge'], $_GET['maxAge']));
             return $count;
             break;
+
         case 2:
             $count = db::instance()->count("
             SELECT id 
@@ -167,6 +175,7 @@ function initialCountQueryFilter($pref){
                 array($_GET['minSalary'], $_GET['maxSalary'], $_GET['female'], $_GET['male'], $_GET['other'], $_GET['minAge'], $_GET['maxAge']));
             return $count;
             break;
+
         case 4:
             $count = db::instance()->count("
             SELECT id 
