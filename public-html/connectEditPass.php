@@ -14,11 +14,11 @@ if (isset($_POST['save'])) {
 $query = db::instance()->get("SELECT * FROM users WHERE username = ? ", array($_SESSION['id']));
 
     if (!password_verify($oldPass, $query[0]['password'])) {
-        $oldPass_error = '<font color="red">Old password is incorrect</font>';                                                                         //TODO change to css
+        $oldPass_error = 'Old password is incorrect';                                                                         //TODO change to css
     }else if($newPass != $newPassCheck){
-        $newPass_error = '<font color="red">New password does not match</font>';
+        $newPass_error = 'New password does not match';
     }else if($oldPass == $newPass){
-        $newPassSame_error = '<font color="red">New password can not be same as old</font>';
+        $newPassSame_error = 'New password can not be same as old';
     }else{
 
         $user = $_SESSION['id'];

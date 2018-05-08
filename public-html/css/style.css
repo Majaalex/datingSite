@@ -145,6 +145,11 @@ ul {
     border-radius: 4px;
     border: 1px solid #CECECE;
 }
+
+.form_error span{
+    color: red;
+}
+
 /*
 #error, .row {
     background: url('img/error.png');

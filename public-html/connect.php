@@ -46,11 +46,11 @@ if (isset($_POST['signup'])) {
     $sql_email_pdo = db::instance()->count("SELECT * FROM users WHERE email = ?", array("$email"));
 
     if (db::instance()->count("SELECT * FROM users WHERE username = ?", array("$user")) > 0) {
-        $name_error = '<font color="red">Username already taken</font>';                                                                         //TODO change to css
+        $name_error = 'Username already taken';                                                                         //TODO change to css
     }else if($pass != $passValidation){
-        $passValidation_error = '<font color="red">Password does not match</font>';
+        $passValidation_error = 'Password does not match';
     }else if(db::instance()->count("SELECT * FROM users WHERE email = ?", array("$email")) > 0){
-        $email_error = '<font color="red">Email already in use</font>';
+        $email_error = 'Email already in use';
     }else{
         //PASSWORD HASHING
         $hashedPass = password_hash($pass, PASSWORD_DEFAULT);
