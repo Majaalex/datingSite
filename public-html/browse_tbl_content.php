@@ -182,8 +182,6 @@ LIMIT $rowsPerPage",
 // Index for which user to print
 $i = 0;
 $divPageName = "page";
-
-
 // MAIN PAGE CONTENT: Loads up all the content to be sent forward
 for ($divPage = 0; $divPage < $totalPages; $divPage++) {
     // Sets a counter to limit amount of users
@@ -221,7 +219,7 @@ for ($divPage = 0; $divPage < $totalPages; $divPage++) {
 
 // PAGINATOR CONTENT: printing out all links for page navigation
 // Change this number to adjust amount of pages to either side shown
-$range = 3;
+$range = 6;
 echo "<div class='paginator'>";
 if ($currentPage > 1) {
     // show << link to go back to page 1
@@ -252,9 +250,9 @@ for ($x = ($currentPage - $range); $x < (($currentPage + $range) + 1); $x++) {
 // if not on last page, show forward and last page links
 if ($currentPage != $totalPages) {
     // get next page
-    $nextpage = $currentPage + 1;
+    $nextPage = $currentPage + 1;
     // echo forward link for next page
-    echo " <a href='$divPageName" . "$nextpage' class='page'>></a> ";
+    echo " <a href='$divPageName" . "$nextPage' class='page'>></a> ";
     // echo forward link for lastpage
     $lastPage = $totalPages - 1;
     echo " <a href='$divPageName" . "$totalPages' class='page'>>></a> ";
@@ -265,14 +263,24 @@ echo "</div>";
 <script>
     // Function to convert values to whatever is set in the filter
     $(document).ready(function () {
-        // if user has no currency rates, they will be set
-        if (localStorage.getItem("openCurrency") === null){
+        // gets date
+        var da = new Date();
+        // sets to 3 days ago
+        da.setDate(da.getDate() - 3);
+        // grabs unix timestamp from localStorage
+        var timeCheck = localStorage.getItem("openCurrencyTime");
+        // converts it away from unix
+        var datte = new Date(timeCheck * 1000);
+        // if user has no currency rates, or they are more than 3 days old, new ones will be loaded
+        if (da.getTime() > datte.getTime() || timeCheck == null) {
             // Queries openechangerates for the latest curreny exchange rates
-           $.get('https://openexchangerates.org/api/latest.json', {app_id: '9d60f5c4e53c43898ee378509406c5c9'}, function (data) {
+            $.get('https://openexchangerates.org/api/latest.json', {app_id: '9d60f5c4e53c43898ee378509406c5c9'}, function (data) {
                 var jsonData = JSON.stringify(data.rates);
+                var d = new Date(data.timestamp);
                 // And stores the ratios in localstorage
+                localStorage.setItem("openCurrencyTime", data.timestamp.toString());
                 localStorage.setItem("openCurrency", jsonData);
-                console.log("Stored data in localstorage!");
+                console.log("Stored currency ratios data in localstorage!");
             });
         }
         // Gets the selected currency
