@@ -1,15 +1,15 @@
 <?php
 require_once '../resources/config.php';
 require_once '../resources/templates/header.php';
+include('profileConnect.php');
 ?>
 
 <?php
-
+//Connect to database and make a query of the persona and set the values in the input fields
 $query = db::instance()->get("SELECT * FROM users WHERE username = ?",array($_SESSION['id']));
 $currency = $query[0]["currency"];
 $gender = $query[0]["gender"];
 $pref = $query[0]["preference"];
-                                                                                                                        //TODO COMMENT CODE
 ?>
     <!DOCTYPE html>
     <head>
@@ -17,34 +17,85 @@ $pref = $query[0]["preference"];
     </head>
 
     <div class="centered">
-        <form method="post" action="profileConnect.php" id="register_form">
+        <!--A form for editing-->
+        <!--All the input fields follow the same principle as the first one-->
+        <form method="post" action="profileEdit.php" id="register_form">
             <h1>Edit</h1>
-            <div>
+            <!--First Name field-->
+            <!--Creates a div if there is an error in the users first name-->
+            <div <?php if (isset($firstName_error)): ?> class="form_error" id="test" <?php endif ?> >
                 <input type="text" name="firstname" placeholder="First Name" value="<?php echo $query[0]["firstname"]; ?>" required>
-            </div>
-            <div>
-                <input type="text" name="lastname" placeholder="Last Name" value="<?php echo $query[0]["lastname"]; ?>" required>
-            </div>
-            <div <?php if (isset($email_error)): ?> class="form_error" <?php endif ?> >
-                <input type="email" name="email" placeholder="Email" value="<?php echo $query[0]["email"]; ?>" required>
-                <?php if (isset($email_error)): ?>
-                    <span><?php echo $email_error; ?></span>
+                <?php if (isset($firstName_error)): ?>
+                    <span><?php echo $firstName_error; ?></span>
                 <?php endif ?>
             </div>
-            <div>
-                <input type="number"  name="postalCode" placeholder="Postal code ex.00200" value="<?php echo $query[0]["postal"]; ?>" required>
+
+            <!--Last Name field-->
+            <div <?php if (isset($lastName_error)): ?> class="form_error" id="test" <?php endif ?> >
+                <input type="text" name="lastname" placeholder="Last Name" value="<?php echo $query[0]["lastname"]; ?>" required>
+                <?php if (isset($lastName_error)): ?>
+                    <span><?php echo $lastName_error; ?></span>
+                <?php endif ?>
             </div>
-            <div>
+
+            <!--Email field-->
+            <div <?php if (isset($emailInUse_error)): ?> class="form_error" <?php endif ?> >
+                <input type="email" name="email" placeholder="Email" value="<?php echo $query[0]["email"]; ?>" required>
+                <?php if (isset($emailInUse_error)): ?>
+                    <span><?php echo $emailInUse_error; ?></span>
+                <?php endif ?>
+                <div <?php if (isset($emailInvalid_error)): ?> class="form_error" <?php endif ?> >
+                    <?php if (isset($emailInvalid_error)): ?>
+                        <span><?php echo $emailInvalid_error; ?></span>
+                    <?php endif ?>
+                </div>
+            </div>
+
+            <!--Postal code field-->
+            <div <?php if (isset($postal_error)): ?> class="form_error" <?php endif ?> >
+                <input type="number" max="99999" name="postalCode" placeholder="Postal code ex.00200" value="<?php echo $query[0]["postal"]; ?>" required>
+                <?php if (isset($postal_error)): ?>
+                    <span><?php echo $postal_error; ?></span>
+                <?php endif ?>
+                <div <?php if (isset($postalPreg_error)): ?> class="form_error" <?php endif ?> >
+                    <?php if (isset($postalPreg_error)): ?>
+                        <span><?php echo $postalPreg_error; ?></span>
+                    <?php endif ?>
+                </div>
+            </div>
+
+            <!--About me field-->
+            <div <?php if (isset($about_error)): ?> class="form_error" <?php endif ?> >
                 <input type="text" name="about" placeholder="About me" value="<?php echo $query[0]["about"]; ?>" required >
+                <?php if (isset($about_error)): ?>
+                    <span><?php echo $about_error; ?></span>
+                <?php endif ?>
             </div>
-            <div>
+
+            <!--Age field-->
+            <div <?php if (isset($age_error)): ?> class="form_error" <?php endif ?> >
                 <input type="number"  name="age" placeholder="Age" value="<?php echo $query[0]["age"]; ?>" required>
+                <?php if (isset($age_error)): ?>
+                    <span><?php echo $age_error; ?></span>
+                <?php endif ?>
+                <div <?php if (isset($ageYoung_error)): ?> class="form_error" <?php endif ?> >
+                    <?php if (isset($ageYoung_error)): ?>
+                        <span><?php echo $ageYoung_error; ?></span>
+                    <?php endif ?>
+                </div>
             </div>
-            <div>
+
+            <!--Salary field-->
+            <div <?php if (isset($salaryPreg_error)): ?> class="form_error" <?php endif ?> >
                 <input type="number" name="salary" placeholder="Salary" value="<?php echo $query[0]["salary"]; ?>" required>
+                <?php if (isset($salaryPreg_error)): ?>
+                    <span><?php echo $salaryPreg_error; ?></span>
+                <?php endif ?>
             </div>
+
+            <!--Currency field-->
             <div>
-                <label>Currency:                <!--TODO MAKE currency stay as the selected one -->
+                <label>Currency:
                     <select name="currency">
                         <optgroup label="Commonly used">
                             <option <?php if ($currency == 'AUD') {echo 'selected' ;} ?> value="AUD">AUD</option>
@@ -222,6 +273,8 @@ $pref = $query[0]["preference"];
                         </optgroup>
                     </select></label>
             </div>
+
+            <!--Gender field-->
             <div>
                 <label>Gender:
                     <select name="gender">
@@ -230,10 +283,16 @@ $pref = $query[0]["preference"];
                         <option <?php if ($gender == "other") {echo 'selected';} ?> value="other">Other</option>
                     </select></label>
             </div>
+
+            <!--Preference field-->
+            <div>
             Preference:
             <input type="checkbox" name="genderM" value="1" <?php if ($pref == 1 ||$pref == 3 || $pref == 5 ||$pref == 7) {echo 'checked';} ?>/> Male
             <input type="checkbox" name="genderF" value="2" <?php if ($pref == 2 ||$pref == 3 || $pref == 6 ||$pref == 7) {echo 'checked';} ?>/> Female
             <input type="checkbox" name="genderO" value="4" <?php if ($pref == 4 ||$pref == 5 || $pref == 6 ||$pref == 7) {echo 'checked';} ?>/> Other
+            </div>
+
+            <!--Submit button-->
             <div>
                 <input type="submit" value="Save" name="save"/>
             </div>

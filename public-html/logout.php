@@ -2,10 +2,9 @@
 <?php
 // load up your config file
 require_once("../resources/config.php");
-
 require_once(TEMPLATES_PATH . "/header.php");
-session_destroy();
-header("Location: ./browse.php");
+session_destroy();                              //Destroy session, This will logout the user.
+header("Location: ./browse.php");        //Redirects the user to the browse/main page
 ?>
     <div id="container">
         <div id="content">

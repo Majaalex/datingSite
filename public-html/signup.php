@@ -1,8 +1,7 @@
 <?php
     require_once '../resources/config.php';
     require_once '../resources/templates/header.php';
-    include('connect.php');
-                                                                                                                        //TODO COMMENT CODE
+    include('connect.php'); //Includes the connection php script so that the site can connect to the database
     ?>
 
     <!DOCTYPE html>
@@ -12,51 +11,112 @@
     </head>
 
     <div class="centered">
+        <!--A form for signing up-->
+        <!--All the input fields follow the same principle as the first one-->
         <form method="post" action="signup.php" id="register_form">
             <h1>Sign up</h1>
-            <div>
+            <!--First Name field-->
+            <!--Creates a div if there is an error in the users first name-->
+            <div <?php if (isset($firstName_error)): ?> class="form_error" id="test" <?php endif ?> >
                 <input type="text" name="firstname" placeholder="First Name" value="<?php echo "$firstName"; ?>" required>
+                <!--If the error isset then the site will output the error message-->
+                <?php if (isset($firstName_error)): ?>
+                    <span><?php echo $firstName_error; ?></span>
+                <?php endif ?>
             </div>
-            <div>
+
+            <!--Last Name field-->
+            <div <?php if (isset($lastName_error)): ?> class="form_error" id="test" <?php endif ?> >
                 <input type="text" name="lastname" placeholder="Last Name" value="<?php echo "$lastName"; ?>" required>
+                <?php if (isset($lastName_error)): ?>
+                    <span><?php echo $lastName_error; ?></span>
+                <?php endif ?>
             </div>
+
+            <!--Username field-->
             <div <?php if (isset($name_error)): ?> class="form_error" id="test" <?php endif ?> >
                 <input type="text" name="username" placeholder="Username" value="<?php echo $user; ?>" required>
                 <?php if (isset($name_error)): ?>
                     <span><?php echo $name_error; ?></span>
                 <?php endif ?>
             </div>
-            <div>
+
+            <!--Password field-->
+            <div <?php if (isset($pass_error)): ?> class="form_error" <?php endif ?> >
                 <input type="password" name="password" placeholder="Password" required >
+                <?php if (isset($pass_error)): ?>
+                    <span><?php echo $pass_error; ?></span>
+                <?php endif ?>
             </div>
+
+            <!--Password validation/check field-->
             <div <?php if (isset($passValidation_error)): ?> class="form_error" <?php endif ?> >
                 <input type="password" name="passwordValidation" placeholder="Password" >
                 <?php if (isset($passValidation_error)): ?>
                     <span><?php echo $passValidation_error; ?></span>
                 <?php endif ?>
             </div>
-            <div <?php if (isset($email_error)): ?> class="form_error" <?php endif ?> >
+
+            <!--Email field-->
+            <div <?php if (isset($emailInUse_error)): ?> class="form_error" <?php endif ?> >
                 <input type="email" name="email" placeholder="Email" value="<?php echo $email; ?>" required>
-                <?php if (isset($email_error)): ?>
-                    <span><?php echo $email_error; ?></span>
+                <?php if (isset($emailInUse_error)): ?>
+                    <span><?php echo $emailInUse_error; ?></span>
                 <?php endif ?>
+                <div <?php if (isset($emailInvalid_error)): ?> class="form_error" <?php endif ?> >
+                <?php if (isset($emailInvalid_error)): ?>
+                    <span><?php echo $emailInvalid_error; ?></span>
+                <?php endif ?>
+                </div>
             </div>
-            <div>
-                <input type="number"  name="postalCode" placeholder="Postal code ex.00200" value="<?php echo "$postal"; ?>" required>
+
+            <!--Postal code field-->
+            <div <?php if (isset($postal_error)): ?> class="form_error" <?php endif ?> >
+                <input type="number" max="99999" name="postalCode" placeholder="Postal code ex.00200" value="<?php echo "$postal"; ?>" required>
+                    <?php if (isset($postal_error)): ?>
+                        <span><?php echo $postal_error; ?></span>
+                    <?php endif ?>
+                    <div <?php if (isset($postalPreg_error)): ?> class="form_error" <?php endif ?> >
+                        <?php if (isset($postalPreg_error)): ?>
+                            <span><?php echo $postalPreg_error; ?></span>
+                        <?php endif ?>
+                    </div>
             </div>
-            <div>
+
+            <!--About me field-->
+            <div <?php if (isset($about_error)): ?> class="form_error" <?php endif ?> >
                 <input type="text" name="about" placeholder="About me" value="<?php echo "$about"; ?>" required >
+                    <?php if (isset($about_error)): ?>
+                        <span><?php echo $about_error; ?></span>
+                    <?php endif ?>
             </div>
-            <div>
+
+            <!--Age field-->
+            <div <?php if (isset($age_error)): ?> class="form_error" <?php endif ?> >
                 <input type="number"  name="age" placeholder="Age" value="<?php echo "$age"; ?>" required>
+                    <?php if (isset($age_error)): ?>
+                        <span><?php echo $age_error; ?></span>
+                    <?php endif ?>
+                    <div <?php if (isset($ageYoung_error)): ?> class="form_error" <?php endif ?> >
+                        <?php if (isset($ageYoung_error)): ?>
+                            <span><?php echo $ageYoung_error; ?></span>
+                        <?php endif ?>
+                    </div>
             </div>
-            <div>
+
+            <!--Salary field-->
+            <div <?php if (isset($salaryPreg_error)): ?> class="form_error" <?php endif ?> >
                 <input type="number" name="salary" placeholder="Salary" value="<?php echo "$salary"; ?>" required>
+                        <?php if (isset($salaryPreg_error)): ?>
+                            <span><?php echo $salaryPreg_error; ?></span>
+                        <?php endif ?>
             </div>
+
+            <!--Currency field-->
             <div>
-                <label>Currency:                <!--TODO MAKE currency stay as the selected one -->
+                <label>Currency:
                     <select name="currency">
-                        <optgroup label="Commonly used">
+                        <optgroup label="Commonly used">        <!--If the currency has been selected it will be checked when trying to post the form-->
                             <option <?php if ($currency == 'AUD') {echo 'selected' ;} ?> value="AUD">AUD</option>
                             <option <?php if ($currency == 'BRL') {echo 'selected' ;} ?> value="BRL">BRL</option>
                             <option <?php if ($currency == 'CAD') {echo 'selected' ;} ?> value="CAD">CAD</option>
@@ -232,17 +292,26 @@
                         </optgroup>
                     </select></label>
             </div>
+
+            <!--Gender field-->
             <div>
                 <label>Gender:
-                    <select name="gender">
+                    <select name="gender">                      <!--If the gender has been selected it will be checked when trying to post the form-->
                         <option <?php if ($gender == "male") {echo 'selected';} ?> value="male">Male</option>
                         <option <?php if ($gender == "female") {echo 'selected';} ?> value="female">Female</option>
                         <option <?php if ($gender == "other") {echo 'selected';} ?> value="other">Other</option>
                     </select></label>
             </div>
-            Preference:        <input type="checkbox" name="genderM" value="1" checked/> Male
-            <input type="checkbox" name="genderF" value="2" /> Female
-            <input type="checkbox" name ="genderO" value="4" /> Other
+
+            <!--Preference field-->
+            <div>
+                Preference:                                     <!--If the preference has been selected it will be checked when trying to post the form-->
+                <input type="checkbox" name="genderM" value="1" <?php if ($preference == 1 ||$preference == 3 || $preference == 5 ||$preference == 7) {echo 'checked';} ?>/> Male
+                <input type="checkbox" name="genderF" value="2" <?php if ($preference == 2 ||$preference == 3 || $preference == 6 ||$preference == 7) {echo 'checked';} ?>/> Female
+                <input type="checkbox" name="genderO" value="4" <?php if ($preference == 4 ||$preference == 5 || $preference == 6 ||$preference == 7) {echo 'checked';} ?>/> Other
+            </div>
+
+            <!--Submit button-->
             <div>
                 <input type="submit" value="Sign up" name="signup"/>
             </div>

@@ -1,6 +1,6 @@
 <?php
 // load up your config file
-require_once("../resources/config.php");
+require_once("../resources/config.php"); //TODO DELETE THIS FROM FINAL PROJECT. OLD AND NOT CONNECTED TO ANYTHING
 ?>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -22,7 +22,7 @@ require_once("../resources/config.php");
                 </tr>
                 <tr>
                     <td>
-                        Email : <?php echo $query[0]["email"]; ?>
+                        Email : <?php if(isset($_SESSION['id'])){ echo $query[0]["email"];}else{ echo "<a href ='" . url_for("login.php") . "'>Login to see this persons email</a>";} ?>
                     </td>
                 </tr>
                 <tr>
