@@ -70,7 +70,7 @@ if (isset($_POST['save'])) {
         array_push($errorsArray,$postalPreg_error);
     }
     //Checks that about me is long enough
-    if(!preg_match('/^.{10,138}$/',$about)){
+    if(!preg_match('/^.{10,}$/',$about)){
         $about_error = 'You need to write a bit more about yourself.';
         array_push($errorsArray, $about_error);
     }
