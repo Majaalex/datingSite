@@ -67,7 +67,8 @@ ul {
     border-top-right-radius: 4px;
     margin-right: 5px;
 }
-
+#POIList {
+}
 #submenu li:hover {
     background: url('../img/layout/success.png');
 }

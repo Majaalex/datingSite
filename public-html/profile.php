@@ -4,20 +4,16 @@ require_once("../resources/config.php");
 
 require_once(TEMPLATES_PATH . "/header.php");
 ?>
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <div id="container">
         <div id="content">
             <?php
-            echo $_SESSION['id'] . "<br>";
             $user = $_GET['user'];
-            echo $user . " AFASDFASDFASDFASDF <br>";
             $query = db::instance()->get("SELECT * FROM users WHERE username = ?",array($user));
             var_dump($query);
-            echo "var postal =" . $query[0]["postal"] . ";";
             ?>
             <script>
-                var postal = '<?php echo $query[0]['postal'] ?>';
+                var postal = '<?php echo $query[0]["postal"]?>';
             </script>
             <table>
                 <tr>
@@ -44,6 +40,15 @@ require_once(TEMPLATES_PATH . "/header.php");
         </div>
     </div>
     <div id="map"></div>
+<div>
+    <table id="POIList">
+        <tr>
+            <td>
+                Here are potential suggestions on where you could go with this person.
+            </td>
+        </tr>
+    </table>
+</div>
     <script>
         // This example creates a simple polygon representing the Bermuda Triangle.
 
@@ -54,8 +59,32 @@ require_once(TEMPLATES_PATH . "/header.php");
                 var coords = response.results[0].geometry.location;
                 //initiate the map with coords
                 initMap(coords);
+                // run gigitransit api to get a list of locations
+                getVenues(coords)
             });
         });
+        function getVenues(coords){
+            console.log(coords);
+            // Build the get varible query
+            //var query = "boundary.circle.lat=" + coords.lat + "&boundary.circle.lon=" + coords.lng + "&layers=venue&size=20&sources=osm" ;
+            var query = "boundary.circle.lat=" + coords.lat + "&boundary.circle.lon=" + coords.lng + "&boundary.circle.radius=5" ;
+            // Send the request
+            console.log('https://api.digitransit.fi/geocoding/v1/search?text=cafe&' + query );
+            $.get('https://api.digitransit.fi/geocoding/v1/search?text=cafe&' + query, function (respon) {
+                for (var i = 0; i < 20; i++){
+                    console.log(respon.features[i].properties.label);
+                    console.log(i);
+                    $('#POIList tr:last').after('<tr><td>' + respon.features[i].properties.label + '</td><tr>')
+                }
+            })
+            $.get('https://api.digitransit.fi/geocoding/v1/search?text=restaurant&' + query, function (respo) {
+                for (var i = 0; i < 20; i++){
+                    console.log(respo.features[i].properties.label);
+                    console.log(i);
+                    $('#POIList tr:last').after('<tr><td>' + respo.features[i].properties.label + '</td><tr>')
+                }
+            })
+        }
 
         function initMap(coords) {
             var map = new google.maps.Map(document.getElementById('map'), {
@@ -78,6 +107,5 @@ require_once(TEMPLATES_PATH . "/header.php");
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAlpvlB0VK_O7RgtcaNHL52NxwjKJ_hOII&callback=initMap"
             async defer></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <?php
 require_once(TEMPLATES_PATH . "/footer.php");

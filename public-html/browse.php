@@ -121,12 +121,17 @@ if (isset($_SESSION['id'])){
                                         USD if there's nobody logged in
                                         <script>
                                             <?php
+                                            // if a user is logged in
                                             if(isset($_SESSION['id'])) {
+                                                // get the currency which the user has set as default..
                                             $user = DB::instance()->get("SELECT currency FROM users WHERE username = ?", array($_SESSION['id']));
                                             ?>
+                                            // and uses sets is as a js variable
                                             var currency = '<?php echo $user[0]["currency"]; ?>'; <?php
                                             } else {
+                                                // if not logged in..
                                                 if (!isset($_SESSION['id'])) {
+                                                    // defaults to USD
                                                     echo "var currency = 'USD'";
                                                 };
                                             }
@@ -134,9 +139,12 @@ if (isset($_SESSION['id'])){
                                         </script>
 
                                         <?php
+                                        // if the user is logged in..
                                         if (isset($_SESSION['id'])) {
+                                            // Sets the users currency as the default in the dropdown list
                                             echo "<option selected='selected'>" . $user[0]["currency"] . "</option>";
                                         }
+                                        // Grabs a html file containing all the currencies
                                         require_once TEMPLATES_PATH . '/currency.html';
                                         ?>
 
