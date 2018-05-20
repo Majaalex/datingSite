@@ -6,7 +6,7 @@ include('profileConnect.php');
 
 <?php
 //Connect to database and make a query of the persona and set the values in the input fields
-$query = db::instance()->get("SELECT * FROM users WHERE username = ?",array($_SESSION['id']));
+$query = db::instance()->get("SELECT firstname,lastname,email,postal,salary,preference,currency,gender,about,age FROM users WHERE username = ?",array($_SESSION['id']));
 $currency = $query[0]["currency"];
 $gender = $query[0]["gender"];
 $pref = $query[0]["preference"];

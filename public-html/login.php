@@ -15,7 +15,7 @@ include("loginConnect.php");
                     <table>
                         <tr>
                             <td>
-                                <input type="text" name="username" placeholder="Username" required/><br>
+                                <input type="text" name="username" placeholder="Username" value="<?php echo "$username"; ?>" required/><br>
                             </td>
                         </tr>
                         <tr>

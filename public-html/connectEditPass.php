@@ -11,7 +11,7 @@ if (isset($_POST['save'])) {
     $newPassCheck =$_POST['newPassCheck'];
 
     //Query to database to get old passwword
-    $query = db::instance()->get("SELECT * FROM users WHERE username = ? ", array($_SESSION['id']));
+    $query = db::instance()->get("SELECT password FROM users WHERE username = ? ", array($_SESSION['id']));
 
     //Creating an error array to log out all the errors in testing
     $errorsArray = array();

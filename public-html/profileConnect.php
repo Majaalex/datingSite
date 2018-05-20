@@ -54,8 +54,8 @@ if (isset($_POST['save'])) {
         array_push($errorsArray, $emailInvalid_error);
     }
     //Check if email is already in use
-    $query = db::instance()->get("SELECT * FROM users WHERE username = ?",array($_SESSION['id']));
-    if(db::instance()->count("SELECT * FROM users WHERE email = ?", array("$email")) > 0 and $email != $query[0]["email"]  ){
+    $query = db::instance()->get("SELECT email FROM users WHERE username = ?",array($_SESSION['id']));
+    if(db::instance()->count("SELECT email FROM users WHERE email = ?", array("$email")) > 0 and $email != $query[0]["email"]  ){
         $emailInUse_error = 'Email already in use';
         array_push($errorsArray, $emailInUse_error);
     }
