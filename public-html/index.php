@@ -7,7 +7,7 @@ require_once(TEMPLATES_PATH . "/header.php");
 ?>
     <div id="container">
         <div id="content">
-            <?php echo url_for("index.php"); ?>
+            <?php header("Location: ./browse.php") ?>
         </div>
     </div>
 <?php
