@@ -1,25 +1,30 @@
 <?php
-    require_once '../resources/config.php';
-    require_once '../resources/templates/header.php';
-    include('connect.php'); //Includes the connection php script so that the site can connect to the database
-    ?>
+require_once '../resources/config.php';
+require_once '../resources/templates/header.php';
+include('profileConnect.php');
+?>
 
+<?php
+//Connect to database and make a query of the persona and set the values in the input fields
+$query = db::instance()->get("SELECT firstname,lastname,email,postal,salary,preference,currency,gender,about,age FROM users WHERE username = ?",array($_SESSION['id']));
+$currency = $query[0]["currency"];
+$gender = $query[0]["gender"];
+$pref = $query[0]["preference"];
+?>
     <!DOCTYPE html>
     <head>
         <meta charset="utf-8">
-        <title>Signup to find your partner</title>
     </head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <div class="centered">
-        <!--A form for signing up-->
+        <!--A form for editing-->
         <!--All the input fields follow the same principle as the first one-->
-        <form method="post" action="signup.php" id="register_form">
-            <h1>Sign up</h1>
+        <form method="post" action="profileEdit.php" id="register_form">
+            <h1>Edit</h1>
             <!--First Name field-->
             <!--Creates a div if there is an error in the users first name-->
             <div <?php if (isset($firstName_error)): ?> class="form_error" id="test" <?php endif ?> >
-                <input type="text" name="firstname" placeholder="First Name" value="<?php echo "$firstName"; ?>" required>
-                <!--If the error isset then the site will output the error message-->
+                <input type="text" name="firstname" placeholder="First Name" value="<?php echo $query[0]["firstname"]; ?>" required>
                 <?php if (isset($firstName_error)): ?>
                     <span><?php echo $firstName_error; ?></span>
                 <?php endif ?>
@@ -27,89 +32,65 @@
 
             <!--Last Name field-->
             <div <?php if (isset($lastName_error)): ?> class="form_error" id="test" <?php endif ?> >
-                <input type="text" name="lastname" placeholder="Last Name" value="<?php echo "$lastName"; ?>" required>
+                <input type="text" name="lastname" placeholder="Last Name" value="<?php echo $query[0]["lastname"]; ?>" required>
                 <?php if (isset($lastName_error)): ?>
                     <span><?php echo $lastName_error; ?></span>
                 <?php endif ?>
             </div>
 
-            <!--Username field-->
-            <div <?php if (isset($name_error)): ?> class="form_error" id="test" <?php endif ?> >
-                <input type="text" name="username" placeholder="Username" value="<?php echo $user; ?>" required>
-                <?php if (isset($name_error)): ?>
-                    <span><?php echo $name_error; ?></span>
-                <?php endif ?>
-            </div>
-
-            <!--Password field-->
-            <div <?php if (isset($pass_error)): ?> class="form_error" <?php endif ?> >
-                <input type="password" name="password" placeholder="Password" required >
-                <?php if (isset($pass_error)): ?>
-                    <span><?php echo $pass_error; ?></span>
-                <?php endif ?>
-            </div>
-
-            <!--Password validation/check field-->
-            <div <?php if (isset($passValidation_error)): ?> class="form_error" <?php endif ?> >
-                <input type="password" name="passwordValidation" placeholder="Password" >
-                <?php if (isset($passValidation_error)): ?>
-                    <span><?php echo $passValidation_error; ?></span>
-                <?php endif ?>
-            </div>
-
             <!--Email field-->
             <div <?php if (isset($emailInUse_error)): ?> class="form_error" <?php endif ?> >
-                <input type="email" name="email" placeholder="Email" value="<?php echo $email; ?>" required>
+                <input type="email" name="email" placeholder="Email" value="<?php echo $query[0]["email"]; ?>" required>
                 <?php if (isset($emailInUse_error)): ?>
                     <span><?php echo $emailInUse_error; ?></span>
                 <?php endif ?>
                 <div <?php if (isset($emailInvalid_error)): ?> class="form_error" <?php endif ?> >
-                <?php if (isset($emailInvalid_error)): ?>
-                    <span><?php echo $emailInvalid_error; ?></span>
-                <?php endif ?>
+                    <?php if (isset($emailInvalid_error)): ?>
+                        <span><?php echo $emailInvalid_error; ?></span>
+                    <?php endif ?>
                 </div>
             </div>
 
             <!--Postal code field-->
             <div <?php if (isset($postal_error)): ?> class="form_error" <?php endif ?> >
-                <input type="number" max="99999" name="postalCode" placeholder="Postal code ex.00200" value="<?php echo "$postal"; ?>" required>
-                    <?php if (isset($postal_error)): ?>
-                        <span><?php echo $postal_error; ?></span>
+                <input type="number" max="99999" name="postalCode" placeholder="Postal code ex.00200" value="<?php echo $query[0]["postal"]; ?>" required>
+                <?php if (isset($postal_error)): ?>
+                    <span><?php echo $postal_error; ?></span>
+                <?php endif ?>
+                <div <?php if (isset($postalPreg_error)): ?> class="form_error" <?php endif ?> >
+                    <?php if (isset($postalPreg_error)): ?>
+                        <span><?php echo $postalPreg_error; ?></span>
                     <?php endif ?>
-                    <div <?php if (isset($postalPreg_error)): ?> class="form_error" <?php endif ?> >
-                        <?php if (isset($postalPreg_error)): ?>
-                            <span><?php echo $postalPreg_error; ?></span>
-                        <?php endif ?>
-                    </div>
+                </div>
             </div>
 
             <!--About me field-->
             <div <?php if (isset($about_error)): ?> class="form_error" <?php endif ?> >
-                <input type="text" name="about" placeholder="About me" value="<?php echo "$about"; ?>" required >
-                    <?php if (isset($about_error)): ?>
-                        <span><?php echo $about_error; ?></span>
-                    <?php endif ?>
+                <input type="text" name="about" placeholder="About me" value="<?php echo $query[0]["about"]; ?>" required >
+                <?php if (isset($about_error)): ?>
+                    <span><?php echo $about_error; ?></span>
+                <?php endif ?>
             </div>
 
             <!--Age field-->
             <div <?php if (isset($age_error)): ?> class="form_error" <?php endif ?> >
-                <input type="number"  name="age" placeholder="Age" value="<?php echo "$age"; ?>" required>
-                    <?php if (isset($age_error)): ?>
-                        <span><?php echo $age_error; ?></span>
+                <input type="number"  name="age" placeholder="Age" value="<?php echo $query[0]["age"]; ?>" required>
+                <?php if (isset($age_error)): ?>
+                    <span><?php echo $age_error; ?></span>
+                <?php endif ?>
+                <div <?php if (isset($ageYoung_error)): ?> class="form_error" <?php endif ?> >
+                    <?php if (isset($ageYoung_error)): ?>
+                        <span><?php echo $ageYoung_error; ?></span>
                     <?php endif ?>
-                    <div <?php if (isset($ageYoung_error)): ?> class="form_error" <?php endif ?> >
-                        <?php if (isset($ageYoung_error)): ?>
-                            <span><?php echo $ageYoung_error; ?></span>
-                        <?php endif ?>
-                    </div>
+                </div>
             </div>
 
-            <!--Salary field NON USD-->
+            <!--Salary field-->
             <div <?php if (isset($salaryPreg_error)): ?> class="form_error" <?php endif ?> >
-                <input id="salaryIn" type="number" name="salaryIn" placeholder="Salary" onchange="currencyCalc()" value="<?php echo "$salary"; ?>" required>
-                        <?php if (isset($salaryPreg_error)): ?>
-                            <span><?php echo $salaryPreg_error; ?></span>
-                        <?php endif ?>
+                <input id="salaryIn" type="number" name="salaryIn" placeholder="Salary" onchange="currencyCalc()" value="<?php echo $query[0]["salary"]; ?>" required>
+                <?php if (isset($salaryPreg_error)): ?>
+                    <span><?php echo $salaryPreg_error; ?></span>
+                <?php endif ?>
             </div>
 
             <!--Salary field USD-->
@@ -121,7 +102,7 @@
             <div>
                 <label>Currency:
                     <select id="currency" name="currency" onchange="currencyCalc()">
-                        <optgroup label="Commonly used">        <!--If the currency has been selected it will be checked when trying to post the form-->
+                        <optgroup label="Commonly used">
                             <option <?php if ($currency == 'AUD') {echo 'selected' ;} ?> value="AUD">AUD</option>
                             <option <?php if ($currency == 'BRL') {echo 'selected' ;} ?> value="BRL">BRL</option>
                             <option <?php if ($currency == 'CAD') {echo 'selected' ;} ?> value="CAD">CAD</option>
@@ -301,7 +282,7 @@
             <!--Gender field-->
             <div>
                 <label>Gender:
-                    <select name="gender">                      <!--If the gender has been selected it will be checked when trying to post the form-->
+                    <select name="gender">
                         <option <?php if ($gender == "male") {echo 'selected';} ?> value="male">Male</option>
                         <option <?php if ($gender == "female") {echo 'selected';} ?> value="female">Female</option>
                         <option <?php if ($gender == "other") {echo 'selected';} ?> value="other">Other</option>
@@ -310,20 +291,56 @@
 
             <!--Preference field-->
             <div>
-                Preference:                                     <!--If the preference has been selected it will be checked when trying to post the form-->
-                <input type="checkbox" name="genderM" value="1" <?php if ($preference == 1 ||$preference == 3 || $preference == 5 ||$preference == 7) {echo 'checked';} ?>/> Male
-                <input type="checkbox" name="genderF" value="2" <?php if ($preference == 2 ||$preference == 3 || $preference == 6 ||$preference == 7) {echo 'checked';} ?>/> Female
-                <input type="checkbox" name="genderO" value="4" <?php if ($preference == 4 ||$preference == 5 || $preference == 6 ||$preference == 7) {echo 'checked';} ?>/> Other
+            Preference:
+            <input type="checkbox" name="genderM" value="1" <?php if ($pref == 1 ||$pref == 3 || $pref == 5 ||$pref == 7) {echo 'checked';} ?>/> Male
+            <input type="checkbox" name="genderF" value="2" <?php if ($pref == 2 ||$pref == 3 || $pref == 6 ||$pref == 7) {echo 'checked';} ?>/> Female
+            <input type="checkbox" name="genderO" value="4" <?php if ($pref == 4 ||$pref == 5 || $pref == 6 ||$pref == 7) {echo 'checked';} ?>/> Other
             </div>
 
             <!--Submit button-->
             <div>
-                <input type="submit" value="Sign up" name="signup"/>
+                <input type="submit" value="Save" name="save"/>
             </div>
         </form>
     </div>
-
 <script>
+    $(document).ready(function () {
+        // gets date
+        var da = new Date();
+        // sets to 3 days ago
+        da.setDate(da.getDate() - 3);
+        // grabs unix timestamp from localStorage
+        var timeCheck = localStorage.getItem("openCurrencyTime");
+        // converts it away from unix
+        var datte = new Date(timeCheck * 1000);
+        // if user has no currency rates, or they are more than 3 days old, new ones will be loaded
+        if (da.getTime() > datte.getTime() || timeCheck == null) {
+            // Queries openechangerates for the latest curreny exchange rates
+            $.get('https://openexchangerates.org/api/latest.json', {app_id: '9d60f5c4e53c43898ee378509406c5c9'}, function (data) {
+                var jsonData = JSON.stringify(data.rates);
+                var d = new Date(data.timestamp);
+                // And stores the ratios in localstorage
+                localStorage.setItem("openCurrencyTime", data.timestamp.toString());
+                localStorage.setItem("openCurrency", jsonData);
+                console.log("Stored currency ratios data in localstorage!");
+            });
+        }
+        // Gets the selected currency
+        var currency = $('#currency').find(":selected").text();
+        // Gets the currency ratio from localstorage
+        var jsonRetrieveData = localStorage.getItem("openCurrency");
+        jsonRetrieveData = JSON.parse(jsonRetrieveData);
+        jsonRetrieveData = jQuery.makeArray(jsonRetrieveData);
+        //goes through each li containing salary and updates the value
+        currency = $.trim(currency);
+        console.log(currency + " on page load");
+        $("#salaryIn").each(function () {
+            var text = $(this).val();
+            var converted = text * jsonRetrieveData[0][currency];
+            $(this).val(converted.toFixed(0));
+        })
+    });
+
     function currencyCalc(){
         // gets date
         var da = new Date();
@@ -365,4 +382,3 @@
 <?php
 require_once '../resources/templates/footer.php';
 ?>
-
